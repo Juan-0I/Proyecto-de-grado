@@ -60,7 +60,7 @@
                   autocomplete="name"
                   maxlength="80"
                   required
-                  <%= errorAttrs('nombre') %>
+                  <%- errorAttrs('nombre') %>
                 >
                 <% if (fieldError('nombre')) { %><p id="error-nombre" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('nombre') %></p><% } %>
               </div>
@@ -77,7 +77,7 @@
                   inputmode="tel"
                   maxlength="20"
                   required
-                  <%= errorAttrs('telefono') %>
+                  <%- errorAttrs('telefono') %>
                 >
                 <% if (fieldError('telefono')) { %><p id="error-telefono" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('telefono') %></p><% } %>
               </div>
@@ -92,7 +92,7 @@
                   placeholder="tucorreo@ejemplo.com"
                   autocomplete="email"
                   maxlength="120"
-                  <%= errorAttrs('email') %>
+                  <%- errorAttrs('email') %>
                 >
                 <% if (fieldError('email')) { %><p id="error-email" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('email') %></p><% } %>
               </div>
@@ -117,7 +117,7 @@
                   autocomplete="off"
                   maxlength="80"
                   required
-                  <%= errorAttrs('dispositivo') %>
+                  <%- errorAttrs('dispositivo') %>
                 >
                 <% if (fieldError('dispositivo')) { %><p id="error-dispositivo" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('dispositivo') %></p><% } %>
               </div>
@@ -125,21 +125,40 @@
               <div>
                 <label for="servicio" class="label-clinic">Servicio <span class="text-error" aria-hidden="true">*</span></label>
                 <div class="relative">
-                  <select id="servicio" name="servicio" class="<%= inputClass('servicio') %> appearance-none pr-10" required data-service-select <%= errorAttrs('servicio') %>>
+                  <select id="servicio" name="servicio" class="<%= inputClass('servicio') %> appearance-none pr-10" required data-service-select <%- errorAttrs('servicio') %>>
                     <option value="">Selecciona un servicio</option>
                     <% services.forEach((service) => { %>
                       <option value="<%= service.nombre %>" <%= value('servicio') === service.nombre ? 'selected' : '' %>><%= service.nombre %> — desde <%= formatCurrency(service.precio_desde) %></option>
                     <% }); %>
+                    <option value="<%= DIAGNOSIS %>" <%= value('servicio') === DIAGNOSIS ? 'selected' : '' %>><%= DIAGNOSIS %></option>
+                    <option value="<%= OTHER %>" <%= value('servicio') === OTHER ? 'selected' : '' %>><%= OTHER %> — lo especifico abajo</option>
                   </select>
                   <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant" aria-hidden="true">expand_more</span>
                 </div>
                 <% if (fieldError('servicio')) { %><p id="error-servicio" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('servicio') %></p><% } %>
+                <div class="mt-3 <%= value('servicio') === OTHER ? '' : 'hidden' %>" data-service-detail-wrap>
+                  <label for="servicio_detalle" class="label-clinic">¿Qué servicio necesitas? <span class="text-error" aria-hidden="true">*</span></label>
+                  <input
+                    id="servicio_detalle"
+                    name="servicio_detalle"
+                    type="text"
+                    class="<%= inputClass('servicio_detalle') %>"
+                    value="<%= value('servicio_detalle') %>"
+                    placeholder="Ej: cambio de vidrio templado"
+                    maxlength="80"
+                    data-service-detail
+                    <%= value('servicio') === OTHER ? 'required' : '' %>
+                    <%- errorAttrs('servicio_detalle') %>
+                  >
+                  <p class="mt-1 text-[11px] text-on-surface-variant">Mínimo 3 caracteres.</p>
+                  <% if (fieldError('servicio_detalle')) { %><p id="error-servicio_detalle" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('servicio_detalle') %></p><% } %>
+                </div>
               </div>
 
               <div>
                 <label for="problema" class="label-clinic">Tipo de problema <span class="text-error" aria-hidden="true">*</span></label>
                 <div class="relative">
-                  <select id="problema" name="problema" class="<%= inputClass('problema') %> appearance-none pr-10" required <%= errorAttrs('problema') %>>
+                  <select id="problema" name="problema" class="<%= inputClass('problema') %> appearance-none pr-10" required <%- errorAttrs('problema') %>>
                     <option value="">¿Qué está pasando?</option>
                     <% PROBLEMAS.forEach((problema) => { %>
                       <option value="<%= problema %>" <%= value('problema') === problema ? 'selected' : '' %>><%= problema %></option>
@@ -148,6 +167,23 @@
                   <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant" aria-hidden="true">expand_more</span>
                 </div>
                 <% if (fieldError('problema')) { %><p id="error-problema" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('problema') %></p><% } %>
+                <div class="mt-3 <%= value('problema') === OTHER ? '' : 'hidden' %>" data-problem-detail-wrap>
+                  <label for="problema_detalle" class="label-clinic">Describe el problema <span class="text-error" aria-hidden="true">*</span></label>
+                  <input
+                    id="problema_detalle"
+                    name="problema_detalle"
+                    type="text"
+                    class="<%= inputClass('problema_detalle') %>"
+                    value="<%= value('problema_detalle') %>"
+                    placeholder="Ej: se calienta y se apaga solo"
+                    maxlength="80"
+                    data-problem-detail
+                    <%= value('problema') === OTHER ? 'required' : '' %>
+                    <%- errorAttrs('problema_detalle') %>
+                  >
+                  <p class="mt-1 text-[11px] text-on-surface-variant">Mínimo 3 caracteres.</p>
+                  <% if (fieldError('problema_detalle')) { %><p id="error-problema_detalle" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('problema_detalle') %></p><% } %>
+                </div>
               </div>
 
               <div class="sm:col-span-2">
@@ -159,7 +195,7 @@
                   class="<%= inputClass('descripcion') %> resize-y"
                   placeholder="Ej: se cayó y la pantalla se ve negra, pero el celular vibra..."
                   maxlength="600"
-                  <%= errorAttrs('descripcion') %>
+                  <%- errorAttrs('descripcion') %>
                 ><%= value('descripcion') %></textarea>
                 <p class="mt-1 text-right text-[11px] text-on-surface-variant"><span data-char-count>0</span>/600</p>
                 <% if (fieldError('descripcion')) { %><p id="error-descripcion" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('descripcion') %></p><% } %>
@@ -183,7 +219,7 @@
                   value="<%= value('fecha_preferida') %>"
                   min="<%= today %>"
                   data-min-date
-                  <%= errorAttrs('fecha_preferida') %>
+                  <%- errorAttrs('fecha_preferida') %>
                 >
                 <p class="mt-1 text-[11px] text-on-surface-variant">Sujeta a disponibilidad del taller.</p>
                 <% if (fieldError('fecha_preferida')) { %><p id="error-fecha_preferida" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('fecha_preferida') %></p><% } %>
@@ -191,7 +227,7 @@
               <div>
                 <label for="franja" class="label-clinic">Franja horaria <span class="font-normal text-on-surface-variant">(opcional)</span></label>
                 <div class="relative">
-                  <select id="franja" name="franja" class="<%= inputClass('franja') %> appearance-none pr-10" <%= errorAttrs('franja') %>>
+                  <select id="franja" name="franja" class="<%= inputClass('franja') %> appearance-none pr-10" <%- errorAttrs('franja') %>>
                     <option value="">Cualquier hora</option>
                     <% FRANJAS.forEach((franja) => { %>
                       <option value="<%= franja %>" <%= value('franja') === franja ? 'selected' : '' %>><%= franja %></option>

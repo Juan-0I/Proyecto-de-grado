@@ -4,7 +4,7 @@
 **Ubicación del negocio:** Cl. 4 #6-75, Plaza Comercial La Campana, Local 102, San Francisco de Sales, Cundinamarca  
 **Tipo:** MVP académico / demostración funcional  
 **Fecha de entrega:** 8 de noviembre de 2026  
-**Versión:** `v0.1.0-mvp`
+**Versión:** `v0.2.0`
 
 ---
 
@@ -16,7 +16,8 @@ Se transformó el prototipo visual de Stitch en una aplicación web funcional, c
 - Backend en Node.js + Express + EJS con base de datos SQLite nativa.
 - Catálogo de 12 productos ficticios con búsqueda, filtros, estado vacío y modal accesible con enlace directo.
 - Flujo completo de reparaciones: el cliente agenda y recibe un ticket; el administrador cambia el estado y el historial queda registrado.
-- Panel administrativo protegido por sesión para gestionar reparaciones y productos.
+- Panel administrativo protegido por sesión para gestionar reparaciones y productos, con subida de imágenes desde el PC.
+- Ajustes de la `v0.2.0`: toda la tarjeta del catálogo abre el detalle, “Otro” y “Necesito diagnóstico” en el agendamiento, modal de ticket creado, stock solo interno, compresión HTTP y SEO técnico.
 - Documentación, datos demo, pruebas automatizadas y guion de presentación.
 
 El proyecto se ejecuta con `npm start` y no depende de PHP, MySQL ni servicios de pago.
@@ -36,10 +37,13 @@ Entregar un MVP evaluable que demuestre, de punta a punta, los procesos clave de
 - Agendamiento de reparaciones con validación en cliente y servidor.
 - Generación y consulta de tickets con historial de estados.
 - Panel administrativo con autenticación por contraseña.
-- CRUD de productos con desactivación lógica.
+- CRUD de productos con desactivación lógica y subida de imágenes (máx. 2 MB).
 - Datos ficticios claramente marcados como demo.
+- Stock como dato interno: el público solo ve “Consultar disponibilidad”.
+- SEO técnico: canonical y Open Graph absolutos, `robots.txt` y `sitemap.xml`.
+- Rendimiento: compresión HTTP y cache busting de CSS/JS.
 - Documentación de uso, base de datos, pruebas y demo.
-- Pruebas de humo automatizadas en navegador real.
+- Pruebas de humo automatizadas en navegador real (60 comprobaciones).
 
 ### Fuera del alcance
 
@@ -71,7 +75,14 @@ Entregar un MVP evaluable que demuestre, de punta a punta, los procesos clave de
 | 13 | Año del copyright actualizado | Cumplido | `res.locals.year` y `views/partials/footer.ejs` |
 | 14 | FAQ, garantía y “cómo funciona” | Cumplido | `views/index.ejs` |
 | 15 | Ejecución con `npm start` | Cumplido | `package.json`, `server/server.js` |
-| 16 | Commits por fase y tag del MVP | Cumplido | Historial Git y tag `v0.1.0-mvp` |
+| 16 | Commits por fase y tag del MVP | Cumplido | Historial Git, tags `v0.1.0-mvp` y `v0.2.0` |
+| 17 | Flecha y toda la tarjeta del catálogo abren el detalle | Cumplido | `views/partials/product-card.ejs`, `public/assets/js/productos.js` |
+| 18 | “Otro” con detalle obligatorio y “No estoy seguro / Necesito diagnóstico” | Cumplido | `views/agendar.ejs`, `server/server.js`, `public/assets/js/agendar.js` |
+| 19 | Modal de confirmación con el número de ticket | Cumplido | `views/seguimiento.ejs`, `public/assets/js/seguimiento.js` |
+| 20 | Stock solo interno y “Consultar disponibilidad” en público | Cumplido | `publicProduct()`, `views/productos.ejs`, `views/admin.ejs` |
+| 21 | Subida de imagen desde el PC en el panel | Cumplido | `POST /api/admin/products/image`, `views/admin.ejs`, `public/assets/js/admin.js` |
+| 22 | Botón de agendar oculto en el encabezado móvil | Cumplido | `views/partials/header.ejs` |
+| 23 | SEO y rendimiento: URLs absolutas, robots/sitemap, compresión y cache busting | Cumplido | `server/server.js`, `views/partials/head.ejs`, `views/partials/scripts.ejs` |
 
 ---
 
@@ -124,10 +135,11 @@ Express (Node.js)
 ### 5.1 Cliente agenda una reparación
 
 1. Entra a `/agendar`.
-2. Completa datos personales, equipo, servicio, problema y fecha preferida.
-3. El navegador valida campos obligatorios; el servidor vuelve a validar.
-4. Si hay errores, responde `422` y conserva los datos ingresados.
+2. Completa datos personales, equipo, servicio, problema y fecha preferida. Puede elegir “No estoy seguro / Necesito diagnóstico” o “Otro”; en este último caso debe escribir el detalle (3–80 caracteres).
+3. El navegador valida campos obligatorios y muestra el detalle solo cuando corresponde; el servidor vuelve a validar.
+4. Si hay errores, responde `422` y conserva los datos ingresados, incluido el detalle.
 5. Si todo es válido, crea el ticket `CH-xxxxx`, registra el estado `RECIBIDO` y redirige a `/seguimiento?codigo=...&nuevo=1`.
+6. Se abre un modal con el número de ticket y un botón para copiarlo. Al cerrarlo se limpia `nuevo=1` de la URL.
 
 ### 5.2 Cliente consulta el estado
 
@@ -149,8 +161,10 @@ Express (Node.js)
 
 1. Abre la pestaña “Productos”.
 2. Crea o edita un producto con validación de nombre, categoría, descripción, precio, stock e imagen.
-3. Puede marcarlo como destacado o inactivo.
-4. Al desactivarlo, desaparece del catálogo público pero permanece en la base para su reactivación.
+3. Puede subir una imagen desde el PC (JPG, PNG o WebP, máximo 2 MB, mínimo 800×600 px) o escribir una ruta/URL.
+4. El stock es un dato interno: el catálogo público siempre muestra “Consultar disponibilidad”.
+5. Puede marcarlo como destacado o inactivo.
+6. Al desactivarlo, desaparece del catálogo público pero permanece en la base para su reactivación.
 
 ---
 
@@ -166,6 +180,8 @@ Express (Node.js)
 - Límite de cuerpo JSON/formulario a 100 kB.
 - Cabeceras `X-Content-Type-Options`, `Referrer-Policy` y `X-Frame-Options`.
 - Escapado de salida de EJS y serialización segura de JSON en `<script>`.
+- Subida de imágenes restringida a JPG, PNG y WebP, con validación por firma real del archivo, tamaño máximo de 2 MB y dimensiones entre 800×600 y 4000×3000 px.
+- El stock numérico no se envía al navegador en las respuestas públicas.
 
 ### Limitaciones asumidas del MVP
 
@@ -206,7 +222,12 @@ La evidencia detallada está en [pruebas.md](pruebas.md). Resumen:
 - CRUD de producto verificado: creación, edición, desactivación y desaparición del catálogo público.
 - Formulario inválido responde `422`; API inválida responde `400`.
 - Filtros, búsqueda, estado vacío y modal verificados en navegador.
-- Enlace directo `?producto=slug` abre el modal correcto.
+- La flecha de la tarjeta abre el modal; el enlace directo `?producto=slug` abre el producto correcto.
+- El stock no aparece en los datos enviados al navegador ni en la API pública.
+- “Otro” exige detalle en cliente y servidor; “Necesito diagnóstico” no lo exige.
+- El modal de ticket creado muestra el código y limpia `?nuevo=1` al cerrarse.
+- La API de imágenes acepta un JPG de 900×600 y rechaza un archivo que no es imagen real.
+- `robots.txt` y `sitemap.xml` responden correctamente.
 - Responsive sin desborde horizontal entre 320 px y 1440 px.
 - Navegación móvil con teclado, cierre con Escape y cierre al hacer clic fuera.
 - Impresión de ticket oculta encabezado, pie, buscador y panel lateral.
@@ -241,8 +262,10 @@ npm run test:smoke
 5. Configurar dominio, HTTPS y despliegue.
 6. Migrar a una base administrada si aumenta la concurrencia.
 7. Añadir notificaciones reales por correo o WhatsApp.
-8. Incorporar imágenes definitivas de productos y del local.
+8. Incorporar imágenes definitivas de productos y del local desde el panel.
 9. Validar precios, horarios y disponibilidad reales con el negocio.
+10. Mover las imágenes subidas a un almacenamiento persistente si se despliega en un servicio con disco efímero.
+11. Añadir rate limiting, CSRF y sesiones persistentes antes de publicar.
 
 ---
 
@@ -262,5 +285,12 @@ npm run test:smoke
 - [x] Mapa de Google integrado.
 - [x] Diseño responsive y estilos de impresión.
 - [x] Documentación de entrega, base de datos, pruebas y demo.
-- [x] Prueba de humo automatizada.
-- [x] Commits por fase y tag `v0.1.0-mvp`.
+- [x] La flecha y toda la tarjeta del catálogo abren el detalle.
+- [x] “Otro” con detalle obligatorio y “Necesito diagnóstico” disponibles.
+- [x] Modal de ticket creado con copia del código.
+- [x] Stock solo interno y “Consultar disponibilidad” en público.
+- [x] Subida de imágenes desde el PC con validación.
+- [x] Botón de agendar oculto en el encabezado móvil.
+- [x] SEO técnico y compresión HTTP.
+- [x] Prueba de humo automatizada (60 comprobaciones).
+- [x] Commits por fase y tags `v0.1.0-mvp` y `v0.2.0`.

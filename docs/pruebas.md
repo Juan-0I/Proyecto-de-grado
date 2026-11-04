@@ -1,6 +1,6 @@
 # Plan y evidencias de prueba
 
-**Fecha de ejecución:** 3 de noviembre de 2026  
+**Fecha de ejecución:** 4 de noviembre de 2026  
 **Entorno:** Windows 11, Node.js 26.13.0, Chrome headless (Playwright Core), servidor local en `http://localhost:3000`.
 
 ---
@@ -31,7 +31,7 @@ npm run test:smoke
 ### 1.2 Resultado esperado
 
 ```text
-Resultado: 39 comprobaciones correctas, 0 fallos.
+Resultado: 60 comprobaciones correctas, 0 fallos.
 Prueba de humo superada.
 ```
 
@@ -41,19 +41,20 @@ Prueba de humo superada.
 
 **Archivo:** `tests/smoke.js`  
 **Herramienta:** Playwright Core + Chrome headless  
-**Resultado:** **39/39 comprobaciones correctas** (3 de noviembre de 2026).
+**Resultado:** **60/60 comprobaciones correctas** (4 de noviembre de 2026).
 
 | Bloque | Comprobaciones |
 | --- | --- |
-| Página de inicio | Respuesta 200, título, un solo H1, botón de menú móvil visible. |
+| Página de inicio | Respuesta 200, título, un solo H1, canonical y Open Graph absolutos, menú móvil y CTA de agendar oculto en móvil. |
 | Responsive | Sin desborde horizontal a 320, 390, 768 y 1280 px. |
-| Catálogo | 12 productos, filtro Audio = 3, estado vacío, texto exacto, limpieza de filtros. |
-| Modal | Apertura, parámetro `producto` en URL, cierre con Escape, enlace directo, producto correcto. |
-| Seguimiento | Ticket `CH-98234`, estado “En revisión”, historial, ticket inexistente. |
-| Agendamiento | Preselección de servicio, contador de caracteres, fecha mínima. |
-| Administración | Login, panel, 4+ reparaciones, pestaña Productos, 12+ productos, diálogos, búsqueda vacía. |
+| Catálogo | 12 productos, filtro Audio = 3, estado vacío, texto exacto, limpieza de filtros, stock fuera del navegador y de la API. |
+| Modal | La flecha abre el detalle, parámetro `producto` en URL, cierre con Escape, enlace directo, producto correcto. |
+| Seguimiento | Ticket `CH-98234`, estado “En revisión”, historial, ticket inexistente, modal de ticket creado y limpieza de `?nuevo=1`. |
+| Agendamiento | Preselección de servicio, contador, fecha mínima, “Otro” con detalle obligatorio, “Necesito diagnóstico” sin detalle, validación 400 en servidor. |
+| Administración | Login, panel, 4+ reparaciones, pestaña Productos, 12+ productos, diálogos, stock interno, subida de imagen válida y rechazo de archivo falso. |
 | Móvil e impresión | Apertura del menú, cierre por clic exterior, ocultamiento de encabezado/pie/buscador/aside, nota de impresión. |
-| Consola | Sin errores de JavaScript. |
+| SEO técnico | `robots.txt` y `sitemap.xml` responden e incluyen productos. |
+| Consola | Sin errores de JavaScript (se excluyen los 400 intencionales de validación). |
 
 ### Salida resumida
 
@@ -62,62 +63,52 @@ Prueba de humo contra http://localhost:3000
 
 1. Página de inicio
   OK   La página de inicio responde 200
-  OK   El título de la página es correcto
-  OK   Hay exactamente un H1
-  OK   El botón del menú móvil está presente
+  OK   La URL canónica es absoluta
+  OK   La imagen para compartir es absoluta
+  OK   El botón de agendar se oculta en el encabezado móvil
 
 2. Responsive sin desborde horizontal
-  OK   Sin desborde horizontal a 320px
-  OK   Sin desborde horizontal a 390px
-  OK   Sin desborde horizontal a 768px
-  OK   Sin desborde horizontal a 1280px
+  OK   Sin desborde horizontal a 320/390/768/1280px
 
 3. Catálogo, filtros y estado vacío
   OK   Se muestran 12 productos activos
-  OK   El filtro Audio muestra 3 productos
-  OK   Aparece el estado vacío al buscar sin resultados
-  OK   El texto del estado vacío es el solicitado
-  OK   Limpiar filtros restaura los 12 productos
+  OK   El catálogo no envía el stock al navegador
+  OK   La API pública no expone cantidades de stock
 
 4. Modal de producto y enlace directo
-  OK   El modal de producto se abre
+  OK   La flecha de la tarjeta abre el detalle
   OK   La URL incluye el parámetro producto
-  OK   El modal se cierra con Escape
   OK   El enlace directo abre el modal
-  OK   El modal muestra el producto correcto
 
 5. Seguimiento de ticket
-  OK   Se muestra el código del ticket
-  OK   Se muestra el estado En revisión
-  OK   Se muestra el historial de la reparación
-  OK   Un ticket inexistente muestra el mensaje de error
+  OK   El modal de ticket creado se abre automáticamente
+  OK   El modal muestra el número de ticket
+  OK   Al cerrar el modal se limpia el parámetro nuevo
 
 6. Formulario de agendamiento
-  OK   El servicio se preselecciona desde la URL
-  OK   El contador de caracteres funciona
-  OK   La fecha mínima está configurada
+  OK   “Otro” muestra el campo de detalle del servicio
+  OK   El detalle del servicio es obligatorio
+  OK   “Necesito diagnóstico” no pide detalle
+  OK   El servidor exige el detalle cuando el servicio es Otro
 
 7. Panel administrativo
-  OK   El formulario de acceso es visible
-  OK   El panel se muestra tras iniciar sesión
-  OK   Se listan al menos 4 reparaciones demo
-  OK   La pestaña Productos se activa
-  OK   Se listan al menos 12 productos en el panel
-  OK   El diálogo de nuevo producto se abre
-  OK   El diálogo de estado se abre
-  OK   La búsqueda sin resultados muestra el estado vacío
+  OK   El diálogo permite subir una imagen desde el PC
+  OK   El stock se marca como dato interno
+  OK   La API guarda una imagen válida de 900×600
+  OK   La API rechaza archivos que no son imágenes reales
 
 8. Menú móvil e impresión
-  OK   El menú móvil se abre
-  OK   El menú móvil se cierra al hacer clic fuera
-  OK   La impresión oculta encabezado y pie
-  OK   La impresión oculta buscador y panel lateral
-  OK   La impresión incluye la nota de demostración
+  OK   El menú móvil se abre y se cierra al hacer clic fuera
+  OK   La impresión oculta encabezado, pie, buscador y panel lateral
 
-9. Errores de consola
+9. SEO técnico
+  OK   robots.txt responde y apunta al sitemap
+  OK   sitemap.xml incluye las páginas y los productos
+
+10. Errores de consola
   OK   Sin errores de consola
 
-Resultado: 39 comprobaciones correctas, 0 fallos.
+Resultado: 60 comprobaciones correctas, 0 fallos.
 Prueba de humo superada.
 ```
 
@@ -145,6 +136,8 @@ Ejecutadas con PowerShell e `Invoke-WebRequest` / `Invoke-RestMethod` contra el 
 | `GET /api/products/smartwatch` | 200 JSON | 200 |
 | `GET /api/services` | 200 JSON | 200, 4 servicios |
 | `GET /api/repairs/CH-98234` | 200 JSON | 200 |
+| `GET /robots.txt` | 200 texto con `Sitemap:` | 200 |
+| `GET /sitemap.xml` | 200 XML con rutas y productos | 200 |
 
 ### 3.2 Autenticación
 
@@ -178,6 +171,8 @@ Ejecutadas con PowerShell e `Invoke-WebRequest` / `Invoke-RestMethod` contra el 
 | `DELETE /api/admin/products/13` | 200 y borrado lógico | 200, “Producto desactivado” |
 | `GET /api/products` tras desactivar | 12 activos | 12 |
 | `GET /api/admin/products` tras desactivar | 13 totales (incluye inactivo) | 13 |
+| `POST /api/admin/products/image` con JPG de 900×600 | 201 y URL en `/uploads/productos/` | 201 |
+| `POST /api/admin/products/image` con archivo falso | 400 | 400 |
 
 > Los datos de prueba se eliminaron con `npm run seed`; la entrega final parte de 12 productos activos.
 
@@ -224,7 +219,8 @@ La medición se hizo con `document.documentElement.scrollWidth <= clientWidth + 
 - Pestañas Reparaciones/Productos con navegación por teclado (`←`, `→`, `Home`, `End`).
 - Filtros de reparaciones y productos, incluidos sus estados vacíos.
 - Diálogo de estado con código, equipo y nota.
-- Diálogo de producto con vista previa de imagen.
+- Diálogo de producto con vista previa de imagen y subida desde el PC.
+- El stock se identifica como interno y el público no lo recibe.
 - Diálogo de desactivación con confirmación.
 
 ### 4.5 Accesibilidad
@@ -284,7 +280,7 @@ Después de `npm run seed`:
 | Incidencia | Estado | Detalle |
 | --- | --- | --- |
 | Iconos Material Symbols mostraban el nombre en texto | Corregido | Se reemplazó el subconjunto por la fuente completa `wght,FILL@400,0..1`. |
-| Desborde horizontal del encabezado en 320–360 px | Corregido | Logo y CTA compactos; `gap` reducido; botón de agendar solo con icono en móvil. |
+| Desborde horizontal del encabezado en 320–360 px | Corregido | Logo y CTA compactos; `gap` reducido; el CTA de agendar se oculta en móvil y queda en el menú. |
 | Fuente de iconos con peso 500 inexistente | Corregido | Se ajustó `.filled` a `wght 400`, que es el peso disponible. |
 | `/no-existe` devuelve 404 y un error de consola de red | Esperado | Es la prueba intencional de la página 404. |
 | El mapa depende de Google Maps | Aceptado | Requiere conexión a internet; no bloquea el resto del sitio. |
@@ -301,5 +297,10 @@ Después de `npm run seed`:
 - [x] Panel administrativo autenticado funciona.
 - [x] CRUD de productos y borrado lógico funcionan.
 - [x] Catálogo con filtros, búsqueda, estado vacío y modal funciona.
+- [x] La flecha y la tarjeta abren el detalle; el stock no se envía al público.
+- [x] “Otro” exige detalle y “Necesito diagnóstico” no.
+- [x] Modal de ticket creado y copia del código funcionan.
+- [x] Subida de imagen válida y rechazo de archivos falsos.
+- [x] `robots.txt` y `sitemap.xml` responden.
 - [x] Responsive sin desborde de 320 a 1440 px.
 - [x] Sin errores de JavaScript en las rutas revisadas.

@@ -1,5 +1,7 @@
 # Cellphone Hospital — MVP web
 
+**Versión:** `v0.2.0`
+
 Sitio web y panel administrativo de **Cellphone Hospital**, ubicado en San Francisco de Sales, Cundinamarca. El proyecto nace del prototipo visual de Stitch y lo convierte en una aplicación funcional con backend, base de datos y flujos demostrables de reparaciones y catálogo.
 
 > **Sitio de demostración académica.** Los productos, precios, servicios, tickets y datos de contacto son ficticios. No hay carrito, pagos, reservas ni envío de correos reales.
@@ -54,6 +56,8 @@ npm run watch:css  # Tailwind en modo watch (en otra terminal)
 | `/seguimiento?codigo=CH-98234` | Ejemplo de ticket con estado e historial. |
 | `/ubicacion` | Dirección, horario, contacto y mapa integrado de Google Maps. |
 | `/admin` | Panel administrativo (requiere contraseña). |
+| `/robots.txt` | Reglas para buscadores. |
+| `/sitemap.xml` | Mapa del sitio generado desde las rutas y los productos activos. |
 
 ## 4. Acceso al panel
 
@@ -67,6 +71,7 @@ En el panel se puede:
 - Actualizar el estado de una reparación y dejar una nota en el historial.
 - Buscar y filtrar productos por categoría.
 - Crear, editar y desactivar productos (borrado lógico: `activo = 0`).
+- Subir imágenes de producto desde el PC (JPG, PNG o WebP, máximo 2 MB, mínimo 800×600 px, ideal 1600×1200 px).
 
 ## 5. Datos de demostración
 
@@ -97,6 +102,8 @@ Copiar `.env.example` como `.env` y ajustar los valores:
 | `ADMIN_PASSWORD` | `admin123` | Contraseña del panel. **Cambiar en producción.** |
 | `ENLACES_ACTIVOS` | `false` | Activa teléfono, correo, WhatsApp, Facebook y enlaces a Google Maps. |
 | `DB_PATH` | `server/data.sqlite` | Ruta alternativa de la base SQLite. |
+| `BASE_URL` | `http://localhost:3000` | Dominio público para URLs absolutas (canonical, Open Graph y sitemap). |
+| `ASSET_VERSION` | versión de `package.json` | Versión usada en `styles.css?v=` y en los scripts para evitar caché vieja. |
 | `NODE_ENV` | — | En `production` la cookie de sesión se marca `Secure`. |
 
 ## 7. Enlaces externos — TODO antes de publicar
@@ -142,11 +149,13 @@ Antes de publicar el sitio, activar los enlaces:
 │  ├─ css/styles.css   # CSS compilado (generado)
 │  ├─ js/              # ui, productos, agendar, seguimiento, admin
 │  ├─ fonts/           # Inter y Material Symbols locales
-│  └─ img/             # Imágenes del sitio y del catálogo
+│  ├─ img/             # Imágenes del sitio y del catálogo
+│  └─ uploads/productos/ # Imágenes subidas desde el panel (ignoradas por Git)
 ├─ tests/smoke.js      # Prueba de humo con Playwright
 ├─ docs/
 │  ├─ original/        # Prototipo original de Stitch
 │  ├─ ENTREGA.md
+│  ├─ cronograma.md    # Plan de cierre de la v0.2.0
 │  ├─ esquema-bd.md
 │  ├─ guion-demo.md
 │  └─ pruebas.md
@@ -174,6 +183,7 @@ Requiere sesión iniciada. Responde `401` sin sesión.
 | `GET` | `/api/admin/repairs` | Lista reparaciones. Acepta `?estado=` y `?q=`. |
 | `PATCH` | `/api/admin/repairs/:codigo/estado` | Cambia el estado y agrega una nota al historial. |
 | `GET` | `/api/admin/products` | Lista todos los productos, incluidos los inactivos. |
+| `POST` | `/api/admin/products/image` | Sube una imagen (`multipart/form-data`, campo `imagen`) y devuelve su URL. |
 | `POST` | `/api/admin/products` | Crea un producto. |
 | `PUT` | `/api/admin/products/:id` | Actualiza un producto. |
 | `DELETE` | `/api/admin/products/:id` | Desactiva un producto (borrado lógico). |
@@ -186,7 +196,7 @@ Con el servidor activo:
 npm run test:smoke
 ```
 
-La prueba usa Chrome o Edge instalado en el sistema. Ver [docs/pruebas.md](docs/pruebas.md) para el detalle de casos, resultados y evidencias.
+La prueba usa Chrome o Edge instalado en el sistema y cubre **60 comprobaciones** (incluye flecha del catálogo, stock fuera del navegador, “Otro” en agendamiento, modal de ticket, subida de imagen y SEO). Ver [docs/pruebas.md](docs/pruebas.md) para el detalle de casos, resultados y evidencias.
 
 ## 12. Documentación de entrega
 
@@ -204,5 +214,6 @@ La prueba usa Chrome o Edge instalado en el sistema. Ver [docs/pruebas.md](docs/
 - Sin carrito, pagos, reservas de productos ni control de inventario transaccional.
 - El mapa integrado depende de la disponibilidad de Google Maps.
 - Los datos viven en un archivo SQLite local (`server/data.sqlite`, ignorado por Git).
+- Las imágenes subidas se guardan en disco (`public/uploads/productos/`), no en la base de datos ni en un servicio externo.
 
 Estas limitaciones son coherentes con un MVP académico y están documentadas para una futura versión de producción.

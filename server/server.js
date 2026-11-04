@@ -1,8 +1,12 @@
 require('dotenv').config();
 
 const crypto = require('crypto');
+const fs = require('fs');
 const path = require('path');
 const express = require('express');
+const compression = require('compression');
+const multer = require('multer');
+const { imageSize } = require('image-size');
 
 const { db, initDb } = require('./db');
 const { seedDatabase } = require('./seed');
@@ -10,6 +14,8 @@ const {
   REPAIR_STATUSES,
   REPAIR_TIMELINE,
   PROBLEMAS,
+  DIAGNOSIS,
+  OTHER,
   FRANJAS,
   CATEGORIAS,
   getStatusInfo,
@@ -24,8 +30,34 @@ const {
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
+const BASE_URL = (process.env.BASE_URL || `http://localhost:${PORT}`).replace(/\/+$/, '');
+const ASSET_VERSION = process.env.ASSET_VERSION || require('../package.json').version;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 const ADMIN_DEMO_HINT = !process.env.ADMIN_PASSWORD;
+const UPLOAD_DIR = path.join(__dirname, '..', 'public', 'uploads', 'productos');
+const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+const MIN_IMAGE = { width: 800, height: 600 };
+const MAX_IMAGE = { width: 4000, height: 3000 };
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: MAX_IMAGE_BYTES, files: 1 }
+});
+
+function detectImageType(buffer) {
+  if (!buffer || buffer.length < 12) return null;
+
+  if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) return 'jpg';
+
+  const pngSignature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  if (buffer.subarray(0, 8).equals(pngSignature)) return 'png';
+
+  if (buffer.toString('ascii', 0, 4) === 'RIFF' && buffer.toString('ascii', 8, 12) === 'WEBP') {
+    return 'webp';
+  }
+
+  return null;
+}
 
 const business = {
   name: 'Cellphone Hospital',
@@ -54,6 +86,7 @@ app.disable('x-powered-by');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '..', 'views'));
 
+app.use(compression());
 app.use(express.json({ limit: '100kb' }));
 app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 app.use(
@@ -73,6 +106,13 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   res.locals.business = business;
   res.locals.currentPath = req.path;
+  const canonicalQuery =
+    req.path === '/productos' && typeof req.query.producto === 'string' && req.query.producto
+      ? `?producto=${encodeURIComponent(req.query.producto)}`
+      : '';
+  res.locals.baseUrl = BASE_URL;
+  res.locals.canonicalUrl = `${BASE_URL}${req.path}${canonicalQuery}`;
+  res.locals.assetVersion = ASSET_VERSION;
   res.locals.year = new Date().getFullYear();
   res.locals.pageTitle = 'Cellphone Hospital | Tecnología con corazón colombiano';
   res.locals.pageDescription =
@@ -86,6 +126,8 @@ app.use((req, res, next) => {
   res.locals.REPAIR_TIMELINE = REPAIR_TIMELINE;
   res.locals.REPAIR_STATUSES = REPAIR_STATUSES;
   res.locals.PROBLEMAS = PROBLEMAS;
+  res.locals.DIAGNOSIS = DIAGNOSIS;
+  res.locals.OTHER = OTHER;
   res.locals.FRANJAS = FRANJAS;
   res.locals.CATEGORIAS = CATEGORIAS;
   res.locals.today = todayISO();
@@ -196,14 +238,16 @@ function validateRepair(body = {}) {
     email: trim(body.email, 120),
     dispositivo: trim(body.dispositivo, 80),
     servicio: trim(body.servicio, 60),
+    servicio_detalle: trim(body.servicio_detalle, 80),
     problema: trim(body.problema, 60),
+    problema_detalle: trim(body.problema_detalle, 80),
     descripcion: trim(body.descripcion, 600),
     fecha_preferida: trim(body.fecha_preferida, 10),
     franja: trim(body.franja, 20)
   };
 
   const errors = {};
-  const services = getActiveServiceNames();
+  const services = [...getActiveServiceNames(), DIAGNOSIS, OTHER];
 
   if (values.nombre.length < 2) {
     errors.nombre = 'Escribe tu nombre completo.';
@@ -224,10 +268,22 @@ function validateRepair(body = {}) {
 
   if (!services.includes(values.servicio)) {
     errors.servicio = 'Selecciona un servicio válido.';
+  } else if (values.servicio === OTHER) {
+    if (values.servicio_detalle.length < 3) {
+      errors.servicio_detalle = 'Especifica el servicio que necesitas (mínimo 3 caracteres).';
+    }
+  } else {
+    values.servicio_detalle = '';
   }
 
   if (!PROBLEMAS.includes(values.problema)) {
     errors.problema = 'Selecciona el tipo de problema.';
+  } else if (values.problema === OTHER) {
+    if (values.problema_detalle.length < 3) {
+      errors.problema_detalle = 'Describe el problema (mínimo 3 caracteres).';
+    }
+  } else {
+    values.problema_detalle = '';
   }
 
   if (values.fecha_preferida) {
@@ -280,8 +336,8 @@ function validateProduct(body = {}) {
     errors.stock = 'El stock debe ser un número entero mayor o igual a 0.';
   }
 
-  if (!/^(\/assets\/|https?:\/\/)/.test(values.imagen)) {
-    errors.imagen = 'La imagen debe iniciar con /assets/ o ser una URL http(s).';
+  if (!/^(\/(assets|uploads)\/|https?:\/\/)/.test(values.imagen)) {
+    errors.imagen = 'La imagen debe iniciar con /assets/, /uploads/ o ser una URL http(s).';
   }
 
   return { values, errors };
@@ -335,6 +391,10 @@ function generateTicketCode() {
   return code;
 }
 
+function composeChoice(value, detail) {
+  return value === OTHER && detail ? `${OTHER}: ${detail}` : value;
+}
+
 function createRepair(values) {
   const codigo = generateTicketCode();
   const created = nowISO();
@@ -352,8 +412,8 @@ function createRepair(values) {
       values.telefono,
       values.email || null,
       values.dispositivo,
-      values.servicio,
-      values.problema,
+      composeChoice(values.servicio, values.servicio_detalle),
+      composeChoice(values.problema, values.problema_detalle),
       values.descripcion || null,
       values.fecha_preferida || null,
       values.franja || null,
@@ -385,6 +445,24 @@ function publicRepair(repair) {
     estado_label: getStatusInfo(repair.estado).label,
     creado_en: repair.creado_en,
     actualizado_en: repair.actualizado_en
+  };
+}
+
+// El stock es un dato interno del panel: al público solo se le informa
+// si el producto está disponible, nunca la cantidad exacta.
+function publicProduct(product) {
+  if (!product) return null;
+
+  return {
+    id: product.id,
+    slug: product.slug,
+    nombre: product.nombre,
+    categoria: product.categoria,
+    descripcion: product.descripcion,
+    precio: product.precio,
+    precio_texto: formatCurrency(product.precio),
+    imagen: product.imagen,
+    destacado: Boolean(product.destacado)
   };
 }
 
@@ -577,13 +655,13 @@ app.get('/api/products', (req, res) => {
 
   sql += ' ORDER BY destacado DESC, id ASC';
   const products = db.prepare(sql).all(...params);
-  res.json({ products });
+  res.json({ products: products.map(publicProduct) });
 });
 
 app.get('/api/products/:idOrSlug', (req, res) => {
   const product = findProduct(req.params.idOrSlug);
   if (!product) return res.status(404).json({ error: 'Producto no encontrado.' });
-  return res.json({ product });
+  return res.json({ product: publicProduct(product) });
 });
 
 app.get('/api/services', (req, res) => {
@@ -702,6 +780,71 @@ app.get('/api/admin/products', requireAdmin, (req, res) => {
   res.json({ products });
 });
 
+app.post('/api/admin/products/image', requireAdmin, (req, res) => {
+  upload.single('imagen')(req, res, (uploadError) => {
+    if (uploadError) {
+      const message =
+        uploadError.code === 'LIMIT_FILE_SIZE'
+          ? 'La imagen supera el máximo de 2 MB.'
+          : 'No se pudo procesar el archivo. Intenta con otra imagen.';
+      return res.status(400).json({ error: message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'Selecciona una imagen para subir.' });
+    }
+
+    const detected = detectImageType(req.file.buffer);
+    if (!detected) {
+      return res.status(400).json({ error: 'El archivo no es una imagen JPG, PNG o WebP válida.' });
+    }
+
+    let dimensions;
+    try {
+      dimensions = imageSize(req.file.buffer);
+    } catch {
+      return res.status(400).json({ error: 'No se pudieron leer las dimensiones de la imagen.' });
+    }
+
+    const width = Number(dimensions.width);
+    const height = Number(dimensions.height);
+
+    if (!width || !height) {
+      return res.status(400).json({ error: 'La imagen no tiene dimensiones válidas.' });
+    }
+
+    if (width < MIN_IMAGE.width || height < MIN_IMAGE.height) {
+      return res.status(400).json({
+        error: `La imagen es muy pequeña (${width}×${height}). Mínimo ${MIN_IMAGE.width}×${MIN_IMAGE.height} px.`
+      });
+    }
+
+    if (width > MAX_IMAGE.width || height > MAX_IMAGE.height) {
+      return res.status(400).json({
+        error: `La imagen es muy grande (${width}×${height}). Máximo ${MAX_IMAGE.width}×${MAX_IMAGE.height} px.`
+      });
+    }
+
+    const filename = `producto-${Date.now()}-${crypto.randomBytes(4).toString('hex')}.${detected}`;
+
+    try {
+      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+      fs.writeFileSync(path.join(UPLOAD_DIR, filename), req.file.buffer);
+    } catch (error) {
+      console.error('[upload]', error);
+      return res.status(500).json({ error: 'No se pudo guardar la imagen en el servidor.' });
+    }
+
+    return res.status(201).json({
+      ok: true,
+      url: `/uploads/productos/${filename}`,
+      width,
+      height,
+      size: req.file.size
+    });
+  });
+});
+
 app.post('/api/admin/products', requireAdmin, (req, res, next) => {
   try {
     const { values, errors } = validateProduct(req.body);
@@ -794,6 +937,50 @@ app.delete('/api/admin/products/:id', requireAdmin, (req, res, next) => {
 });
 
 /* ----------------------------------------
+   SEO
+---------------------------------------- */
+
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+app.get('/robots.txt', (req, res) => {
+  res
+    .type('text/plain')
+    .send(
+      ['User-agent: *', 'Allow: /', 'Disallow: /admin', 'Disallow: /api/', '', `Sitemap: ${BASE_URL}/sitemap.xml`, ''].join(
+        '\n'
+      )
+    );
+});
+
+app.get('/sitemap.xml', (req, res) => {
+  const products = db.prepare('SELECT slug FROM products WHERE activo = 1 ORDER BY id ASC').all();
+  const paths = ['/', '/productos', '/agendar', '/seguimiento', '/ubicacion'];
+
+  const urls = paths
+    .map((route) => `${BASE_URL}${route}`)
+    .concat(
+      products.map((product) => `${BASE_URL}/productos?producto=${encodeURIComponent(product.slug)}`)
+    );
+
+  const body = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ...urls.map((url) => `  <url><loc>${escapeXml(url)}</loc></url>`),
+    '</urlset>',
+    ''
+  ].join('\n');
+
+  res.type('application/xml').send(body);
+});
+
+/* ----------------------------------------
    Manejo de errores
 ---------------------------------------- */
 
@@ -826,6 +1013,7 @@ app.use((error, req, res, next) => {
 
 function start() {
   initDb();
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
   const seeded = seedDatabase();
 
   app.listen(PORT, () => {

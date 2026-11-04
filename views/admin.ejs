@@ -262,7 +262,7 @@
                   <div class="mt-auto flex items-end justify-between gap-2 pt-2">
                     <div>
                       <p class="text-sm font-bold text-primary"><%= formatCurrency(product.precio) %></p>
-                      <p class="text-[10px] text-on-surface-variant">Stock: <%= product.stock %><%= product.destacado ? ' · Destacado' : '' %></p>
+                      <p class="text-[10px] text-on-surface-variant">Stock interno: <%= product.stock %><%= product.destacado ? ' · Destacado' : '' %></p>
                     </div>
                     <div class="flex items-center gap-1">
                       <button type="button" class="flex h-8 w-8 items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary" data-edit-product="<%= product.id %>" aria-label="Editar <%= product.nombre %>">
@@ -375,15 +375,27 @@
             <input id="pf-precio" name="precio" type="number" class="input-clinic" min="0" step="100" required>
           </div>
           <div>
-            <label for="pf-stock" class="label-clinic">Stock <span class="text-error" aria-hidden="true">*</span></label>
+            <label for="pf-stock" class="label-clinic">Stock interno <span class="text-error" aria-hidden="true">*</span></label>
             <input id="pf-stock" name="stock" type="number" class="input-clinic" min="0" step="1" required>
+            <p class="mt-1 text-[11px] text-on-surface-variant">Solo lo ves tú. El sitio público muestra “Consultar disponibilidad”.</p>
           </div>
           <div class="sm:col-span-2">
-            <label for="pf-imagen" class="label-clinic">Imagen</label>
-            <input id="pf-imagen" name="imagen" type="text" class="input-clinic text-sm" placeholder="/assets/img/productos/placeholder.svg" maxlength="300" data-image-input>
+            <label for="pf-imagen-file" class="label-clinic">Imagen desde tu PC</label>
+            <input
+              id="pf-imagen-file"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              class="block w-full cursor-pointer rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2 text-sm text-on-surface-variant file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-2 file:text-sm file:font-semibold file:text-on-primary hover:file:bg-primary/90"
+              data-image-file
+            >
+            <p class="mt-1 text-[11px] text-on-surface-variant">JPG, PNG o WebP · máximo 2 MB · mínimo 800×600 px · ideal 1600×1200 px (4:3).</p>
+            <p id="pf-image-status" class="mt-1 hidden text-[11px] font-medium" role="status"></p>
             <div class="mt-2 flex items-center gap-3">
               <img id="pf-image-preview" src="/assets/img/productos/placeholder.svg" alt="Vista previa de la imagen" class="h-16 w-24 rounded-lg border border-outline-variant object-cover">
-              <p class="text-[11px] text-on-surface-variant">Usa una ruta <code class="rounded bg-surface-container px-1">/assets/...</code> o una URL https. Si se deja vacío se usa la imagen de referencia.</p>
+              <div class="min-w-0 flex-1">
+                <label for="pf-imagen" class="label-clinic">O escribe una ruta o URL</label>
+                <input id="pf-imagen" name="imagen" type="text" class="input-clinic text-sm" placeholder="/assets/img/productos/placeholder.svg" maxlength="300" data-image-input>
+              </div>
             </div>
           </div>
           <label class="flex cursor-pointer items-center gap-2 rounded-xl border border-outline-variant bg-surface-container-low p-3 text-sm text-on-surface">

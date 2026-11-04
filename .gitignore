@@ -6,3 +6,5 @@ server/data.sqlite-wal
 *.log
 .DS_Store
 Thumbs.db
+public/uploads/productos/*
+!public/uploads/productos/.gitkeep

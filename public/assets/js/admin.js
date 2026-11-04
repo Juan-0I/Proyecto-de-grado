@@ -224,8 +224,11 @@
   const productError = $('#product-error');
   const productSubmit = $('[data-product-submit]');
   const imageInput = $('[data-image-input]');
+  const imageFile = $('[data-image-file]');
+  const imageStatus = $('#pf-image-status');
   const imagePreview = $('#pf-image-preview');
   const placeholder = '/assets/img/productos/placeholder.svg';
+  const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 
   const field = (id) => document.getElementById(id);
 
@@ -235,7 +238,66 @@
     imagePreview.src = source;
   }
 
+  function setImageStatus(message, tone = 'muted') {
+    if (!imageStatus) return;
+
+    if (!message) {
+      imageStatus.textContent = '';
+      imageStatus.classList.add('hidden');
+      return;
+    }
+
+    imageStatus.textContent = message;
+    imageStatus.classList.remove('hidden');
+    imageStatus.className = `mt-1 text-[11px] font-medium ${
+      tone === 'error' ? 'text-error' : tone === 'success' ? 'text-primary' : 'text-on-surface-variant'
+    }`;
+  }
+
   imageInput?.addEventListener('input', updateImagePreview);
+
+  imageFile?.addEventListener('change', async () => {
+    const file = imageFile.files?.[0];
+    if (!file) return;
+
+    const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+
+    if (!allowed.includes(file.type)) {
+      setImageStatus('Formato no válido. Usa JPG, PNG o WebP.', 'error');
+      imageFile.value = '';
+      return;
+    }
+
+    if (file.size > MAX_IMAGE_BYTES) {
+      setImageStatus('La imagen supera el máximo de 2 MB.', 'error');
+      imageFile.value = '';
+      return;
+    }
+
+    if (imagePreview) imagePreview.src = URL.createObjectURL(file);
+    setImageStatus('Subiendo imagen…');
+
+    const body = new FormData();
+    body.append('imagen', file);
+    imageFile.disabled = true;
+
+    try {
+      const response = await fetch('/api/admin/products/image', { method: 'POST', body });
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) throw new Error(data.error || 'No se pudo subir la imagen.');
+
+      field('pf-imagen').value = data.url;
+      updateImagePreview();
+      const kb = Math.round((data.size || file.size) / 1024);
+      setImageStatus(`Imagen lista: ${data.width}×${data.height} px, ${kb} KB.`, 'success');
+    } catch (error) {
+      setImageStatus(error.message, 'error');
+      updateImagePreview();
+    } finally {
+      imageFile.disabled = false;
+    }
+  });
 
   if (imagePreview) {
     imagePreview.addEventListener('error', () => {
@@ -262,6 +324,9 @@
     field('pf-imagen').value = product?.imagen || '';
     field('pf-destacado').checked = Boolean(product?.destacado);
     field('pf-activo').checked = product ? Boolean(product.activo) : true;
+
+    if (imageFile) imageFile.value = '';
+    setImageStatus('');
 
     if (productDialogTitle) productDialogTitle.textContent = product ? 'Editar producto' : 'Nuevo producto';
     updateImagePreview();

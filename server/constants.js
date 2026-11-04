@@ -45,13 +45,17 @@ const REPAIR_STATUSES = [
 
 const REPAIR_TIMELINE = REPAIR_STATUSES.filter((status) => status.value !== 'CANCELADO');
 
+const DIAGNOSIS = 'No estoy seguro / Necesito diagnóstico';
+const OTHER = 'Otro';
+
 const PROBLEMAS = [
   'Pantalla rota',
   'Batería',
   'Carga / puerto USB',
   'Humedad',
   'Software',
-  'Otro'
+  DIAGNOSIS,
+  OTHER
 ];
 
 const FRANJAS = [
@@ -171,6 +175,8 @@ module.exports = {
   REPAIR_STATUSES,
   REPAIR_TIMELINE,
   PROBLEMAS,
+  DIAGNOSIS,
+  OTHER,
   FRANJAS,
   CATEGORIAS,
   ESTADOS_PEDIDO,

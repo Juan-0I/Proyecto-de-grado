@@ -11,6 +11,7 @@
  */
 
 const fs = require('fs');
+const path = require('path');
 const { chromium } = require('playwright-core');
 
 const BASE = process.env.BASE_URL || 'http://localhost:3000';
@@ -58,7 +59,11 @@ function check(condition, message) {
   const consoleErrors = [];
   page.on('pageerror', (error) => consoleErrors.push(error.message));
   page.on('console', (message) => {
-    if (message.type() === 'error') consoleErrors.push(message.text());
+    if (message.type() !== 'error') return;
+    // Las pruebas de validación provocan 400 esperados; no son fallos del sitio.
+    const source = message.location()?.url || '';
+    if (source.includes('/api/repairs')) return;
+    consoleErrors.push(`${message.text()}${source ? ` (${source})` : ''}`);
   });
 
   console.log(`\nPrueba de humo contra ${BASE}\n`);
@@ -68,8 +73,17 @@ function check(condition, message) {
   check(home && home.status() === 200, 'La página de inicio responde 200');
   check((await page.title()).includes('Cellphone Hospital'), 'El título de la página es correcto');
   check((await page.locator('h1').count()) === 1, 'Hay exactamente un H1');
+  check(
+    (await page.locator('link[rel="canonical"]').getAttribute('href')).startsWith(BASE),
+    'La URL canónica es absoluta'
+  );
+  check(
+    (await page.locator('meta[property="og:image"]').getAttribute('content')).startsWith(BASE),
+    'La imagen para compartir es absoluta'
+  );
   await page.setViewportSize({ width: 390, height: 844 });
   check(await page.locator('#menu-toggle').isVisible(), 'El botón del menú móvil está presente');
+  check(!(await page.locator('#header-agendar').isVisible()), 'El botón de agendar se oculta en el encabezado móvil');
   await page.setViewportSize({ width: 1280, height: 900 });
 
   console.log('\n2. Responsive sin desborde horizontal');
@@ -96,9 +110,22 @@ function check(condition, message) {
   await page.click('#productos-vacio [data-reset-filters]');
   check((await page.locator('[data-product-card]:visible').count()) === 12, 'Limpiar filtros restaura los 12 productos');
 
+  const publicData = await page.locator('#productos-data').textContent();
+  check(!/"stock"/.test(publicData), 'El catálogo no envía el stock al navegador');
+  const apiProducts = await page.evaluate(async () => (await fetch('/api/products')).json());
+  check(
+    apiProducts.products.every((product) => !('stock' in product) && !('disponible' in product)),
+    'La API pública no expone cantidades ni estado de stock'
+  );
+
   console.log('\n4. Modal de producto y enlace directo');
-  await page.click('[data-product-open]');
-  check(await page.locator('#producto-dialog').evaluate((dialog) => dialog.open), 'El modal de producto se abre');
+  const firstCard = page.locator('[data-product-card]').first();
+  const openValue = await firstCard.locator('[data-product-open]').getAttribute('data-product-open');
+  check(openValue && !openValue.includes('"'), 'El enlace de la tarjeta tiene un slug limpio');
+  await firstCard.scrollIntoViewIfNeeded();
+  const arrowBox = await firstCard.locator('span:text-is("arrow_forward")').boundingBox();
+  await page.mouse.click(arrowBox.x + arrowBox.width / 2, arrowBox.y + arrowBox.height / 2);
+  check(await page.locator('#producto-dialog').evaluate((dialog) => dialog.open), 'La flecha de la tarjeta abre el detalle');
   check(new URL(page.url()).searchParams.has('producto'), 'La URL incluye el parámetro producto');
   await page.keyboard.press('Escape');
   await page.waitForTimeout(200);
@@ -116,12 +143,62 @@ function check(condition, message) {
   await page.goto(BASE + '/seguimiento?codigo=CH-00000', { waitUntil: 'networkidle' });
   check((await page.locator('main').innerText()).includes('No encontramos el ticket'), 'Un ticket inexistente muestra el mensaje de error');
 
+  await page.goto(BASE + '/seguimiento?codigo=CH-98234&nuevo=1', { waitUntil: 'networkidle' });
+  check(
+    await page.locator('#ticket-created-dialog').evaluate((dialog) => dialog.open),
+    'El modal de ticket creado se abre automáticamente'
+  );
+  check(
+    (await page.locator('#ticket-created-dialog').innerText()).includes('CH-98234'),
+    'El modal muestra el número de ticket'
+  );
+  await page.click('[data-close-ticket-dialog]');
+  await page.waitForTimeout(150);
+  check(
+    !(await page.locator('#ticket-created-dialog').evaluate((dialog) => dialog.open)),
+    'El modal de ticket se cierra'
+  );
+  check(!new URL(page.url()).searchParams.has('nuevo'), 'Al cerrar el modal se limpia el parámetro nuevo');
+
   console.log('\n6. Formulario de agendamiento');
   await page.goto(BASE + '/agendar?servicio=Pantallas', { waitUntil: 'networkidle' });
   check((await page.locator('#servicio').inputValue()) === 'Pantallas', 'El servicio se preselecciona desde la URL');
   await page.fill('#descripcion', 'Prueba de contador');
   check((await page.locator('[data-char-count]').textContent()).trim() === '18', 'El contador de caracteres funciona');
   check((await page.locator('[data-min-date]').getAttribute('min')).length === 10, 'La fecha mínima está configurada');
+
+  await page.selectOption('#servicio', 'Otro');
+  check(await page.locator('[data-service-detail-wrap]').isVisible(), '“Otro” muestra el campo de detalle del servicio');
+  check(
+    (await page.locator('[data-service-detail]').getAttribute('required')) !== null,
+    'El detalle del servicio es obligatorio'
+  );
+  await page.selectOption('#problema', 'No estoy seguro / Necesito diagnóstico');
+  check(
+    !(await page.locator('[data-problem-detail-wrap]').isVisible()),
+    '“Necesito diagnóstico” no pide detalle'
+  );
+  await page.selectOption('#problema', 'Otro');
+  check(await page.locator('[data-problem-detail-wrap]').isVisible(), '“Otro” muestra el campo de detalle del problema');
+
+  const invalidRepair = await page.evaluate(async () => {
+    const response = await fetch('/api/repairs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nombre: 'Prueba',
+        telefono: '3217635196',
+        dispositivo: 'Equipo de prueba',
+        servicio: 'Otro',
+        problema: 'Software'
+      })
+    });
+    return { status: response.status, data: await response.json() };
+  });
+  check(
+    invalidRepair.status === 400 && Boolean(invalidRepair.data.fields?.servicio_detalle),
+    'El servidor exige el detalle cuando el servicio es Otro'
+  );
 
   console.log('\n7. Panel administrativo');
   await page.goto(BASE + '/admin', { waitUntil: 'networkidle' });
@@ -136,7 +213,37 @@ function check(condition, message) {
   check((await page.locator('[data-admin-product]:visible').count()) >= 12, 'Se listan al menos 12 productos en el panel');
   await page.click('[data-open-product]');
   check(await page.locator('#product-dialog').evaluate((dialog) => dialog.open), 'El diálogo de nuevo producto se abre');
+  check(await page.locator('#pf-imagen-file').isVisible(), 'El diálogo permite subir una imagen desde el PC');
+  check(
+    (await page.locator('#pf-stock').locator('xpath=following-sibling::p').first().innerText()).includes('Solo lo ves tú'),
+    'El stock se marca como dato interno'
+  );
   await page.click('#product-dialog [data-dialog-close]');
+
+  const sampleImage = fs.readFileSync(
+    path.join(__dirname, '..', 'public', 'assets', 'img', 'productos', 'audifonos-bluetooth.jpg')
+  );
+  const uploadResponse = await context.request.post(`${BASE}/api/admin/products/image`, {
+    multipart: {
+      imagen: { name: 'prueba.jpg', mimeType: 'image/jpeg', buffer: sampleImage }
+    }
+  });
+  const uploadData = await uploadResponse.json();
+  check(
+    uploadResponse.status() === 201 && String(uploadData.url || '').startsWith('/uploads/productos/'),
+    'La API guarda una imagen válida de 900×600'
+  );
+  if (uploadData.url) {
+    const uploadedPath = path.join(__dirname, '..', 'public', uploadData.url.replace(/^\//, ''));
+    if (fs.existsSync(uploadedPath)) fs.unlinkSync(uploadedPath);
+  }
+
+  const badUpload = await context.request.post(`${BASE}/api/admin/products/image`, {
+    multipart: {
+      imagen: { name: 'falso.jpg', mimeType: 'image/jpeg', buffer: Buffer.from('esto no es una imagen') }
+    }
+  });
+  check(badUpload.status() === 400, 'La API rechaza archivos que no son imágenes reales');
   await page.click('[data-admin-tab="reparaciones"]');
   await page.locator('[data-open-status]').first().click();
   check(await page.locator('#status-dialog').evaluate((dialog) => dialog.open), 'El diálogo de estado se abre');
@@ -173,7 +280,17 @@ function check(condition, message) {
   check(printState.note, 'La impresión incluye la nota de demostración');
   await page.emulateMedia({ media: 'screen' });
 
-  console.log('\n9. Errores de consola');
+  console.log('\n9. SEO técnico');
+  const robots = await context.request.get(`${BASE}/robots.txt`);
+  check(robots.status() === 200 && (await robots.text()).includes('Sitemap:'), 'robots.txt responde y apunta al sitemap');
+  const sitemap = await context.request.get(`${BASE}/sitemap.xml`);
+  const sitemapText = await sitemap.text();
+  check(
+    sitemap.status() === 200 && sitemapText.includes('<urlset') && sitemapText.includes('/productos?producto='),
+    'sitemap.xml incluye las páginas y los productos'
+  );
+
+  console.log('\n10. Errores de consola');
   check(consoleErrors.length === 0, `Sin errores de consola${consoleErrors.length ? `: ${consoleErrors.join(' | ')}` : ''}`);
 
   await browser.close();

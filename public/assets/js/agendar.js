@@ -35,6 +35,27 @@
     }
   }
 
+  const OTHER_VALUE = 'Otro';
+
+  function bindConditionalDetail(selectSelector, wrapSelector, inputSelector) {
+    const select = form.querySelector(selectSelector);
+    const wrap = form.querySelector(wrapSelector);
+    const input = form.querySelector(inputSelector);
+    if (!select || !wrap || !input) return;
+
+    const sync = () => {
+      const active = select.value === OTHER_VALUE;
+      wrap.classList.toggle('hidden', !active);
+      input.required = active;
+    };
+
+    select.addEventListener('change', sync);
+    sync();
+  }
+
+  bindConditionalDetail('[data-service-select]', '[data-service-detail-wrap]', '[data-service-detail]');
+  bindConditionalDetail('#problema', '[data-problem-detail-wrap]', '[data-problem-detail]');
+
   const firstInvalid = form.querySelector('[aria-invalid="true"]');
   if (firstInvalid) {
     firstInvalid.focus({ preventScroll: true });

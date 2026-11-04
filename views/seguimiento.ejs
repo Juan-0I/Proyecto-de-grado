@@ -307,6 +307,29 @@
       <% } %>
     </div>
   </section>
+
+  <% if (nuevo && repair) { %>
+    <dialog id="ticket-created-dialog" class="modal-dialog max-w-md" aria-labelledby="ticket-created-title">
+      <div class="p-6 text-center">
+        <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary" aria-hidden="true">
+          <span class="material-symbols-outlined text-[30px]">check_circle</span>
+        </span>
+        <h2 id="ticket-created-title" class="mt-4 text-headline-sm text-on-surface">¡Ticket creado!</h2>
+        <p class="mt-2 text-body-sm text-on-surface-variant">Guarda este número. Lo necesitarás para consultar el estado de tu reparación.</p>
+        <p class="mt-4 rounded-xl border border-primary/25 bg-primary/5 px-4 py-3 font-mono text-2xl font-bold tracking-wide text-primary"><%= repair.codigo %></p>
+        <div class="mt-5 flex flex-col gap-2">
+          <button type="button" class="btn-primary w-full px-5 py-3 text-sm" data-copy-code="<%= repair.codigo %>">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">content_copy</span>
+            Copiar número de ticket
+          </button>
+          <button type="button" class="btn-secondary w-full px-5 py-3 text-sm" data-close-ticket-dialog>
+            Ver mi reparación
+          </button>
+        </div>
+        <p class="mt-4 text-[11px] leading-relaxed text-on-surface-variant">Te contactaremos para confirmar la cita. Si cierras esta ventana, el número seguirá visible en la página.</p>
+      </div>
+    </dialog>
+  <% } %>
 </main>
 
 <%- include('partials/footer') %>

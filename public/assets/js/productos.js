@@ -101,7 +101,6 @@
     const title = document.getElementById('producto-titulo');
     const description = document.getElementById('producto-descripcion');
     const price = document.getElementById('producto-precio');
-    const stock = document.getElementById('producto-stock');
 
     if (image) {
       image.onerror = () => {
@@ -115,16 +114,6 @@
     if (title) title.textContent = product.nombre;
     if (description) description.textContent = product.descripcion;
     if (price) price.textContent = product.precioTexto;
-
-    if (stock) {
-      stock.replaceChildren();
-      stock.className = 'mt-1 flex items-center gap-1.5 text-body-sm font-medium text-on-surface';
-      const dot = document.createElement('span');
-      dot.className = `inline-block h-2 w-2 rounded-full ${product.stock > 0 ? 'bg-primary-container' : 'bg-error'}`;
-      dot.setAttribute('aria-hidden', 'true');
-      stock.appendChild(dot);
-      stock.appendChild(document.createTextNode(product.stock > 0 ? 'Disponible en tienda' : 'Agotado por ahora'));
-    }
   }
 
   function openProduct(slug, { push = true, trigger = null } = {}) {

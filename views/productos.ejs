@@ -9,7 +9,6 @@
     descripcion: product.descripcion,
     precio: product.precio,
     precioTexto: formatCurrency(product.precio),
-    stock: product.stock,
     imagen: product.imagen,
     destacado: Boolean(product.destacado)
   }));
@@ -132,7 +131,10 @@
         </div>
         <div class="sm:border-l sm:border-outline-variant sm:pl-4">
           <p class="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">Disponibilidad</p>
-          <p id="producto-stock" class="mt-1 flex items-center gap-1.5 text-body-sm font-medium text-on-surface"></p>
+          <p id="producto-stock" class="mt-1 flex items-center gap-1.5 text-body-sm font-medium text-on-surface">
+            <span class="inline-block h-2 w-2 rounded-full bg-primary-container" aria-hidden="true"></span>
+            Consultar disponibilidad
+          </p>
         </div>
       </div>
 

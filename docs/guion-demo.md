@@ -53,9 +53,10 @@
      **“Ups! No hay más productos con esos filtros.”**
 5. Hacer clic en **Ver todos los productos**.
    - Resultado esperado: vuelven los 12 productos y el buscador queda limpio.
-6. Hacer clic en la tarjeta **Smartwatch Deportivo**.
-   - Resultado esperado: se abre un modal con imagen, categoría, descripción, precio, disponibilidad y aviso de producto demo.
+6. Hacer clic en la **flecha** de la tarjeta **Smartwatch Deportivo** (o en cualquier parte de la tarjeta).
+   - Resultado esperado: se abre un modal con imagen, categoría, descripción, precio, “Consultar disponibilidad” y aviso de producto demo.
    - Señalar que la URL cambia a `?producto=smartwatch`.
+   - Aclarar que el número de stock es interno: el público solo ve “Consultar disponibilidad”.
 7. Cerrar con `Escape` y comprobar que la URL vuelve a `/productos`.
 
 **Mensaje sugerido:**
@@ -75,9 +76,12 @@
    - Servicio: `Pantallas`
    - Problema: `Pantalla rota`
    - Descripción: `Se cayó y el táctil no responde.`
-4. Enviar el formulario.
-   - Resultado esperado: redirección a `/seguimiento` con un ticket nuevo `CH-xxxxx` y el aviso “¡Solicitud registrada!”.
-5. Señalar el botón **Copiar ticket**.
+4. Antes de enviar, mostrar las opciones **No estoy seguro / Necesito diagnóstico** y **Otro**.
+   - Al elegir “Otro” aparece un campo de detalle obligatorio (mínimo 3 caracteres).
+5. Enviar el formulario.
+   - Resultado esperado: redirección a `/seguimiento` con un ticket nuevo `CH-xxxxx` y un modal “¡Ticket creado!”.
+6. Señalar el número en grande y el botón **Copiar número de ticket**; cerrar con **Ver mi reparación**.
+   - Al cerrar, la URL pierde `?nuevo=1` y el aviso queda visible en la página.
 
 **Alternativa si no se quiere crear un ticket nuevo:**
 
@@ -128,7 +132,8 @@
    - Resultado esperado: el estado cambió a **Listo para entrega** y el historial incluye la nueva nota.
 6. En la pestaña B, ir a **Productos**:
    - Mostrar los 12 productos.
-   - Crear un producto de prueba con nombre `Producto Demo`, categoría `Accesorios`, precio `10000`, stock `1`.
+   - Crear un producto de prueba con nombre `Producto Demo`, categoría `Accesorios`, precio `10000`, stock interno `1`.
+   - Subir una imagen desde el PC (JPG/PNG/WebP, máximo 2 MB) y mostrar la vista previa.
    - Guardar y señalar que aparece en la lista.
    - Editarlo y cambiar el precio.
    - Desactivarlo con el icono de papelera y confirmar.
@@ -145,7 +150,7 @@
 
 1. Abrir las herramientas de desarrollo y activar el modo dispositivo (por ejemplo, 390 × 844).
 2. Recargar el inicio.
-3. Abrir el menú móvil con el botón de hamburguesa.
+3. Abrir el menú móvil con el botón de hamburguesa. Señalar que el botón verde de agendar ya no ocupa el encabezado móvil; la acción sigue dentro del menú.
 4. Cerrar con `Escape` o haciendo clic fuera del menú.
 5. Navegar con `Tab` y mostrar el foco visible en botones y enlaces.
 6. Señalar que el modal se cierra con `Escape` y devuelve el foco a la tarjeta.

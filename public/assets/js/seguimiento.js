@@ -1,6 +1,26 @@
 (() => {
   'use strict';
 
+  /* ----------------------------------------
+     Confirmación de ticket creado
+  ---------------------------------------- */
+  const ticketDialog = document.getElementById('ticket-created-dialog');
+
+  if (ticketDialog) {
+    const cleanUrl = () => {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('nuevo');
+      window.history.replaceState({}, '', url);
+    };
+
+    ticketDialog.addEventListener('close', cleanUrl);
+    ticketDialog.querySelector('[data-close-ticket-dialog]')?.addEventListener('click', () => {
+      ticketDialog.close();
+    });
+
+    ticketDialog.showModal();
+  }
+
   const form = document.querySelector('[data-tracking-form]');
   if (!form) return;
 
