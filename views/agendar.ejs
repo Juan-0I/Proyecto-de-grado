@@ -1,0 +1,267 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<%
+  const fieldError = (name) => errors[name] || null;
+  const value = (name) => old[name] ?? '';
+  const inputClass = (name) => `input-clinic ${fieldError(name) ? 'border-error focus:border-error focus:ring-error/20' : ''}`;
+  const errorAttrs = (name) => fieldError(name) ? `aria-invalid="true" aria-describedby="error-${name}"` : '';
+%>
+
+<main id="contenido">
+  <section class="border-b border-outline-variant bg-surface-container-low py-10 md:py-14">
+    <div class="mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
+      <nav class="flex items-center gap-1.5 text-xs text-on-surface-variant" aria-label="Ruta de navegación">
+        <a href="/" class="rounded transition-colors hover:text-primary">Inicio</a>
+        <span class="material-symbols-outlined text-[14px]" aria-hidden="true">chevron_right</span>
+        <span class="font-medium text-on-surface" aria-current="page">Agendar reparación</span>
+      </nav>
+      <div class="mt-4 max-w-2xl">
+        <h1 class="text-[32px] font-bold leading-tight tracking-tight text-on-surface md:text-headline-lg">Agenda tu reparación</h1>
+        <p class="mt-2 text-body-md text-on-surface-variant">Déjanos los datos de tu equipo y te contactaremos para confirmar la cita. Al terminar recibirás un número de ticket para seguir el proceso.</p>
+      </div>
+      <div class="mt-5 flex flex-wrap gap-2 text-xs font-medium text-on-surface-variant">
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-outline-variant bg-surface-container-lowest px-3 py-1.5"><span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">schedule</span> Respuesta el mismo día</span>
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-outline-variant bg-surface-container-lowest px-3 py-1.5"><span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">verified_user</span> Garantía de 30 días</span>
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-outline-variant bg-surface-container-lowest px-3 py-1.5"><span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">receipt_long</span> Ticket de seguimiento</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-10 md:py-14">
+    <div class="mx-auto grid w-full max-w-container-max gap-8 px-margin-mobile md:px-margin-desktop lg:grid-cols-[1.6fr_0.9fr] lg:items-start lg:gap-10">
+      <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-5 shadow-clinic md:p-8">
+        <% if (formError) { %>
+          <div class="mb-6 flex items-start gap-2 rounded-xl border border-error/30 bg-error-container p-4 text-body-sm text-on-error-container" role="alert">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">error</span>
+            <div>
+              <p class="font-semibold">No pudimos registrar la solicitud</p>
+              <p class="mt-0.5"><%= formError %></p>
+            </div>
+          </div>
+        <% } %>
+
+        <form action="/agendar" method="post" class="space-y-6" data-repair-form>
+          <fieldset>
+            <legend class="flex items-center gap-2 text-headline-sm text-on-surface">
+              <span class="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-on-primary">1</span>
+              Tus datos
+            </legend>
+            <div class="mt-4 grid gap-4 sm:grid-cols-2">
+              <div>
+                <label for="nombre" class="label-clinic">Nombre completo <span class="text-error" aria-hidden="true">*</span></label>
+                <input
+                  id="nombre"
+                  name="nombre"
+                  type="text"
+                  class="<%= inputClass('nombre') %>"
+                  value="<%= value('nombre') %>"
+                  placeholder="Ej: María Rodríguez"
+                  autocomplete="name"
+                  maxlength="80"
+                  required
+                  <%= errorAttrs('nombre') %>
+                >
+                <% if (fieldError('nombre')) { %><p id="error-nombre" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('nombre') %></p><% } %>
+              </div>
+              <div>
+                <label for="telefono" class="label-clinic">Teléfono / WhatsApp <span class="text-error" aria-hidden="true">*</span></label>
+                <input
+                  id="telefono"
+                  name="telefono"
+                  type="tel"
+                  class="<%= inputClass('telefono') %>"
+                  value="<%= value('telefono') %>"
+                  placeholder="Ej: 321 763 5196"
+                  autocomplete="tel"
+                  inputmode="tel"
+                  maxlength="20"
+                  required
+                  <%= errorAttrs('telefono') %>
+                >
+                <% if (fieldError('telefono')) { %><p id="error-telefono" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('telefono') %></p><% } %>
+              </div>
+              <div class="sm:col-span-2">
+                <label for="email" class="label-clinic">Correo electrónico <span class="font-normal text-on-surface-variant">(opcional)</span></label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  class="<%= inputClass('email') %>"
+                  value="<%= value('email') %>"
+                  placeholder="tucorreo@ejemplo.com"
+                  autocomplete="email"
+                  maxlength="120"
+                  <%= errorAttrs('email') %>
+                >
+                <% if (fieldError('email')) { %><p id="error-email" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('email') %></p><% } %>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="border-t border-outline-variant/60 pt-6">
+            <legend class="flex items-center gap-2 text-headline-sm text-on-surface">
+              <span class="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-on-primary">2</span>
+              Tu equipo
+            </legend>
+            <div class="mt-4 grid gap-4 sm:grid-cols-2">
+              <div class="sm:col-span-2">
+                <label for="dispositivo" class="label-clinic">Marca y modelo del equipo <span class="text-error" aria-hidden="true">*</span></label>
+                <input
+                  id="dispositivo"
+                  name="dispositivo"
+                  type="text"
+                  class="<%= inputClass('dispositivo') %>"
+                  value="<%= value('dispositivo') %>"
+                  placeholder="Ej: Samsung Galaxy A54, iPhone 12, Lenovo IdeaPad"
+                  autocomplete="off"
+                  maxlength="80"
+                  required
+                  <%= errorAttrs('dispositivo') %>
+                >
+                <% if (fieldError('dispositivo')) { %><p id="error-dispositivo" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('dispositivo') %></p><% } %>
+              </div>
+
+              <div>
+                <label for="servicio" class="label-clinic">Servicio <span class="text-error" aria-hidden="true">*</span></label>
+                <div class="relative">
+                  <select id="servicio" name="servicio" class="<%= inputClass('servicio') %> appearance-none pr-10" required data-service-select <%= errorAttrs('servicio') %>>
+                    <option value="">Selecciona un servicio</option>
+                    <% services.forEach((service) => { %>
+                      <option value="<%= service.nombre %>" <%= value('servicio') === service.nombre ? 'selected' : '' %>><%= service.nombre %> — desde <%= formatCurrency(service.precio_desde) %></option>
+                    <% }); %>
+                  </select>
+                  <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant" aria-hidden="true">expand_more</span>
+                </div>
+                <% if (fieldError('servicio')) { %><p id="error-servicio" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('servicio') %></p><% } %>
+              </div>
+
+              <div>
+                <label for="problema" class="label-clinic">Tipo de problema <span class="text-error" aria-hidden="true">*</span></label>
+                <div class="relative">
+                  <select id="problema" name="problema" class="<%= inputClass('problema') %> appearance-none pr-10" required <%= errorAttrs('problema') %>>
+                    <option value="">¿Qué está pasando?</option>
+                    <% PROBLEMAS.forEach((problema) => { %>
+                      <option value="<%= problema %>" <%= value('problema') === problema ? 'selected' : '' %>><%= problema %></option>
+                    <% }); %>
+                  </select>
+                  <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant" aria-hidden="true">expand_more</span>
+                </div>
+                <% if (fieldError('problema')) { %><p id="error-problema" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('problema') %></p><% } %>
+              </div>
+
+              <div class="sm:col-span-2">
+                <label for="descripcion" class="label-clinic">Cuéntanos qué pasó <span class="font-normal text-on-surface-variant">(opcional)</span></label>
+                <textarea
+                  id="descripcion"
+                  name="descripcion"
+                  rows="3"
+                  class="<%= inputClass('descripcion') %> resize-y"
+                  placeholder="Ej: se cayó y la pantalla se ve negra, pero el celular vibra..."
+                  maxlength="600"
+                  <%= errorAttrs('descripcion') %>
+                ><%= value('descripcion') %></textarea>
+                <p class="mt-1 text-right text-[11px] text-on-surface-variant"><span data-char-count>0</span>/600</p>
+                <% if (fieldError('descripcion')) { %><p id="error-descripcion" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('descripcion') %></p><% } %>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="border-t border-outline-variant/60 pt-6">
+            <legend class="flex items-center gap-2 text-headline-sm text-on-surface">
+              <span class="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-on-primary">3</span>
+              ¿Cuándo te queda bien?
+            </legend>
+            <div class="mt-4 grid gap-4 sm:grid-cols-2">
+              <div>
+                <label for="fecha_preferida" class="label-clinic">Fecha preferida <span class="font-normal text-on-surface-variant">(opcional)</span></label>
+                <input
+                  id="fecha_preferida"
+                  name="fecha_preferida"
+                  type="date"
+                  class="<%= inputClass('fecha_preferida') %>"
+                  value="<%= value('fecha_preferida') %>"
+                  min="<%= today %>"
+                  data-min-date
+                  <%= errorAttrs('fecha_preferida') %>
+                >
+                <p class="mt-1 text-[11px] text-on-surface-variant">Sujeta a disponibilidad del taller.</p>
+                <% if (fieldError('fecha_preferida')) { %><p id="error-fecha_preferida" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('fecha_preferida') %></p><% } %>
+              </div>
+              <div>
+                <label for="franja" class="label-clinic">Franja horaria <span class="font-normal text-on-surface-variant">(opcional)</span></label>
+                <div class="relative">
+                  <select id="franja" name="franja" class="<%= inputClass('franja') %> appearance-none pr-10" <%= errorAttrs('franja') %>>
+                    <option value="">Cualquier hora</option>
+                    <% FRANJAS.forEach((franja) => { %>
+                      <option value="<%= franja %>" <%= value('franja') === franja ? 'selected' : '' %>><%= franja %></option>
+                    <% }); %>
+                  </select>
+                  <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant" aria-hidden="true">expand_more</span>
+                </div>
+                <% if (fieldError('franja')) { %><p id="error-franja" class="mt-1.5 text-xs font-medium text-error"><%= fieldError('franja') %></p><% } %>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="border-t border-outline-variant/60 pt-6">
+            <p class="mb-4 flex items-start gap-2 text-[11px] leading-relaxed text-on-surface-variant">
+              <span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">info</span>
+              Al enviar la solicitud autorizas a Cellphone Hospital a contactarte por teléfono o correo para confirmar la cita. Este es un formulario de demostración académica.
+            </p>
+            <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <a href="/" class="btn-secondary px-5 py-3 text-sm">Cancelar</a>
+              <button type="submit" class="btn-primary px-6 py-3 text-sm" data-submit-repair>
+                <span class="material-symbols-outlined text-[20px]" aria-hidden="true">send</span>
+                <span data-submit-label>Enviar solicitud</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <aside class="space-y-5 lg:sticky lg:top-24">
+        <div class="rounded-2xl border border-primary/25 bg-primary/5 p-6">
+          <h2 class="text-headline-sm text-on-surface">Tu ticket, al instante</h2>
+          <p class="mt-2 text-body-sm text-on-surface-variant">Al registrar la solicitud recibirás un código como <strong class="font-mono text-on-surface">CH-10245</strong> para consultar el estado de tu reparación.</p>
+          <ol class="mt-4 space-y-3">
+            <li class="flex gap-3">
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">1</span>
+              <p class="text-body-sm text-on-surface-variant"><strong class="text-on-surface">Registramos tu solicitud</strong><br>Te contactamos para confirmar la cita.</p>
+            </li>
+            <li class="flex gap-3">
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">2</span>
+              <p class="text-body-sm text-on-surface-variant"><strong class="text-on-surface">Diagnóstico</strong><br>Revisamos el equipo y te damos el valor final.</p>
+            </li>
+            <li class="flex gap-3">
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">3</span>
+              <p class="text-body-sm text-on-surface-variant"><strong class="text-on-surface">Reparación y entrega</strong><br>Sigues todo con tu número de ticket.</p>
+            </li>
+          </ol>
+        </div>
+
+        <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-6">
+          <h2 class="text-headline-sm text-on-surface">Antes de venir</h2>
+          <ul class="mt-3 space-y-2.5 text-body-sm text-on-surface-variant">
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true">battery_charging_full</span> Trae el cargador y, si aplica, la funda del equipo.</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true">backup</span> Si puedes, haz un respaldo de tus datos antes de la revisión.</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true">receipt_long</span> Conserva el número de ticket que te entregamos.</li>
+          </ul>
+        </div>
+
+        <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+          <h2 class="text-headline-sm text-on-surface">¿Prefieres hablar con nosotros?</h2>
+          <p class="mt-2 text-body-sm text-on-surface-variant">También puedes visitarnos o escribirnos. La información de contacto está disponible sin enlaces activos mientras el sitio está en revisión.</p>
+          <div class="mt-4 space-y-2 text-body-sm text-on-surface">
+            <p class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true">call</span><%= business.phone %></p>
+            <p class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true">mail</span><%= business.email %></p>
+            <p class="flex items-start gap-2"><span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true">location_on</span><span><%= business.address %><br><%= business.city %></span></p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<%- include('partials/footer') %>
+<%- include('partials/scripts', { pageScript: 'agendar' }) %>

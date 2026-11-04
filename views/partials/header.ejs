@@ -1,0 +1,81 @@
+<%
+  const navItems = [
+    { href: '/', label: 'Inicio', icon: 'home' },
+    { href: '/productos', label: 'Productos', icon: 'storefront' },
+    { href: '/agendar', label: 'Agendar reparación', icon: 'build' },
+    { href: '/seguimiento', label: 'Estado del ticket', icon: 'search' },
+    { href: '/ubicacion', label: 'Ubicación', icon: 'location_on' }
+  ];
+  const isActive = (href) => href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+%>
+<header class="sticky top-0 z-50 border-b border-outline-variant/40 bg-surface/90 backdrop-blur-md supports-[backdrop-filter]:bg-surface/75 print:hidden">
+  <div class="mx-auto flex h-[72px] w-full max-w-container-max items-center justify-between gap-2 px-margin-mobile sm:gap-4 md:px-margin-desktop">
+    <a href="/" class="group flex shrink-0 items-center gap-2.5 rounded-lg" aria-label="Cellphone Hospital, ir al inicio">
+      <img src="/assets/img/site/logo.svg" alt="" width="44" height="44" class="h-10 w-10 rounded-xl shadow-clinic transition-transform duration-300 group-hover:-rotate-3 md:h-11 md:w-11" decoding="async">
+      <span class="flex flex-col leading-none">
+        <span class="text-sm font-bold tracking-tight text-on-surface md:text-lg">Cellphone Hospital</span>
+        <span class="mt-1 hidden text-[10px] font-medium uppercase tracking-[0.14em] text-on-surface-variant sm:block">San Francisco de Sales</span>
+      </span>
+    </a>
+
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="Navegación principal">
+      <% navItems.forEach((item) => { %>
+        <a
+          href="<%= item.href %>"
+          class="rounded-lg px-3 py-2 text-sm font-medium transition-colors <%= isActive(item.href) ? 'bg-primary/10 font-semibold text-primary' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' %>"
+          <%= isActive(item.href) ? 'aria-current="page"' : '' %>
+        ><%= item.label %></a>
+      <% }); %>
+    </nav>
+
+    <div class="flex shrink-0 items-center gap-2">
+      <a href="/ubicacion" class="hidden items-center gap-1.5 rounded-full border border-outline-variant bg-surface-container-lowest px-4 py-2 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-surface-container sm:inline-flex">
+        <span class="material-symbols-outlined text-[18px]" aria-hidden="true">location_on</span>
+        Cómo llegar
+      </a>
+      <a href="/agendar" aria-label="Agendar cita" class="inline-flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-sm font-semibold text-on-primary shadow-clinic transition-colors hover:bg-primary/90 focus-visible:outline-none sm:h-auto sm:w-auto sm:px-5 sm:py-2.5">
+        <span class="material-symbols-outlined text-[18px]" aria-hidden="true">build</span>
+        <span class="hidden sm:inline">Agendar cita</span>
+      </a>
+      <button
+        type="button"
+        id="menu-toggle"
+        class="flex h-10 w-10 items-center justify-center rounded-lg border border-outline-variant text-on-surface transition-colors hover:bg-surface-container lg:hidden"
+        aria-expanded="false"
+        aria-controls="menu-movil"
+        aria-label="Abrir menú de navegación"
+      >
+        <span class="material-symbols-outlined text-2xl" data-menu-icon aria-hidden="true">menu</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="menu-movil" class="hidden border-t border-outline-variant/40 bg-surface-container-lowest lg:hidden" data-mobile-menu>
+    <nav class="mx-auto w-full max-w-container-max px-margin-mobile py-4" aria-label="Navegación móvil">
+      <ul class="space-y-1">
+        <% navItems.forEach((item) => { %>
+          <li>
+            <a
+              href="<%= item.href %>"
+              class="flex items-center gap-3 rounded-xl px-3 py-3 text-base font-medium transition-colors <%= isActive(item.href) ? 'bg-primary/10 text-primary' : 'text-on-surface hover:bg-surface-container' %>"
+              <%= isActive(item.href) ? 'aria-current="page"' : '' %>
+            >
+              <span class="material-symbols-outlined text-[22px]" aria-hidden="true"><%= item.icon %></span>
+              <%= item.label %>
+            </a>
+          </li>
+        <% }); %>
+      </ul>
+      <div class="mt-4 rounded-xl border border-outline-variant bg-surface-container-low p-4">
+        <p class="flex items-start gap-2 text-sm text-on-surface-variant">
+          <span class="material-symbols-outlined text-[20px] text-primary" aria-hidden="true">store</span>
+          <span><%= business.address %><br><%= business.city %></span>
+        </p>
+        <p class="mt-2 flex items-center gap-2 text-sm text-on-surface-variant">
+          <span class="material-symbols-outlined text-[20px] text-primary" aria-hidden="true">schedule</span>
+          <%= business.hours %>
+        </p>
+      </div>
+    </nav>
+  </div>
+</header>

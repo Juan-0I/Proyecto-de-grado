@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-pt-24">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <meta name="description" content="<%= pageDescription %>">
+  <meta name="theme-color" content="#006d37">
+  <meta name="color-scheme" content="light">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cellphone Hospital">
+  <meta property="og:title" content="<%= pageTitle %>">
+  <meta property="og:description" content="<%= pageDescription %>">
+  <meta property="og:image" content="/assets/img/site/hero-tecnico.jpg">
+  <meta property="og:locale" content="es_CO">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/site/logo.svg">
+  <link rel="apple-touch-icon" href="/assets/img/site/logo.svg">
+  <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/material-symbols-outlined.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script type="application/ld+json">
+    <%- JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'LocalBusiness',
+      name: business.name,
+      description: 'Reparación de celulares, computadores y tablets, venta de accesorios y tecnología en San Francisco de Sales, Cundinamarca.',
+      image: '/assets/img/site/hero-tecnico.jpg',
+      telephone: business.phone,
+      email: business.email,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Cl. 4 #6-75, Plaza Comercial La Campana, Local 102',
+        addressLocality: 'San Francisco de Sales',
+        addressRegion: 'Cundinamarca',
+        addressCountry: 'CO'
+      },
+      openingHours: 'Mo-Su 08:30-21:30',
+      priceRange: '$$',
+      sameAs: [business.facebookUrl]
+    }).replace(/</g, '\\u003c') %>
+  </script>
+</head>
+<body class="min-h-screen bg-background text-on-surface">
+  <a class="skip-link" href="#contenido">Saltar al contenido principal</a>

@@ -1,0 +1,427 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main id="contenido">
+  <!-- Hero -->
+  <section class="relative overflow-hidden pb-16 pt-10 md:pb-24 md:pt-16">
+    <div class="pointer-events-none absolute -left-32 top-0 h-80 w-80 rounded-full bg-primary/10 blur-3xl" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-primary-container/15 blur-3xl" aria-hidden="true"></div>
+
+    <div class="relative mx-auto grid w-full max-w-container-max items-center gap-12 px-margin-mobile md:px-margin-desktop lg:grid-cols-2 lg:gap-16">
+      <div class="max-w-xl">
+        <p class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary">
+          <span class="relative flex h-2 w-2" aria-hidden="true">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-container opacity-75"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
+          </span>
+          Reparación y tecnología en San Francisco de Sales
+        </p>
+
+        <h1 class="mt-5 text-balance text-[34px] font-bold leading-[1.08] tracking-[-0.03em] text-on-surface sm:text-5xl lg:text-[3.4rem]">
+          Tu tecnología, en las <span class="relative whitespace-nowrap text-primary">mejores manos<span class="absolute -bottom-1 left-0 h-1.5 w-full rounded-full bg-primary-container/40" aria-hidden="true"></span></span>.
+        </h1>
+
+        <p class="mt-5 max-w-lg text-body-lg text-on-surface-variant">
+          Diagnóstico claro, reparación cuidadosa y accesorios seleccionados. Cuidamos tu celular, computador o tablet como si fuera nuestro.
+        </p>
+
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href="/agendar" class="btn-primary group px-7 py-4 text-base">
+            <span class="material-symbols-outlined text-[22px]" aria-hidden="true">build</span>
+            Agendar reparación
+            <span class="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-0.5" aria-hidden="true">arrow_forward</span>
+          </a>
+          <a href="/productos" class="btn-secondary px-7 py-4 text-base">
+            <span class="material-symbols-outlined text-[22px]" aria-hidden="true">storefront</span>
+            Ver productos
+          </a>
+        </div>
+
+        <ul class="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-body-sm text-on-surface-variant">
+          <li class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined filled text-[18px] text-primary" aria-hidden="true">verified</span>
+            Garantía de 30 días
+          </li>
+          <li class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined filled text-[18px] text-primary" aria-hidden="true">verified</span>
+            Diagnóstico claro
+          </li>
+          <li class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined filled text-[18px] text-primary" aria-hidden="true">verified</span>
+            Atención local
+          </li>
+        </ul>
+      </div>
+
+      <div class="relative mx-auto w-full max-w-md pb-10 lg:max-w-none lg:pb-0">
+        <div class="relative overflow-hidden rounded-[2rem] border border-outline-variant bg-surface-container shadow-clinic-lg">
+          <div class="aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/5]">
+            <img
+              src="/assets/img/site/hero-tecnico.jpg"
+              alt="Técnico de Cellphone Hospital revisando un celular en el taller"
+              class="h-full w-full object-cover"
+              width="900"
+              height="1125"
+              fetchpriority="high"
+              decoding="async"
+            >
+          </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/55 via-transparent to-transparent" aria-hidden="true"></div>
+          <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between gap-3 rounded-2xl border border-white/20 bg-surface-container-lowest/95 p-3 shadow-clinic backdrop-blur">
+            <div class="flex items-center gap-2.5">
+              <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary" aria-hidden="true">
+                <span class="material-symbols-outlined text-[22px]">handyman</span>
+              </span>
+              <div>
+                <p class="text-sm font-semibold text-on-surface">Equipo en buenas manos</p>
+                <p class="text-[11px] text-on-surface-variant">Seguimiento con número de ticket</p>
+              </div>
+            </div>
+            <span class="hidden rounded-full bg-primary-container px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-on-primary-container sm:inline">Activo</span>
+          </div>
+        </div>
+
+        <div class="absolute -left-3 -top-3 hidden overflow-hidden rounded-2xl border-4 border-background shadow-clinic-lg sm:block lg:-left-8 lg:top-8 lg:w-36">
+          <img src="/assets/img/site/hero-gadgets.jpg" alt="Accesorios y gadgets disponibles en la tienda" class="h-24 w-32 object-cover lg:h-28 lg:w-full" width="288" height="192" loading="lazy" decoding="async">
+        </div>
+
+        <div class="absolute -right-2 top-4 flex items-center gap-2 rounded-2xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 shadow-clinic-lg lg:-right-5 lg:top-16">
+          <span class="flex h-9 w-9 items-center justify-center rounded-full bg-primary-container/20 text-primary" aria-hidden="true">
+            <span class="material-symbols-outlined filled text-[20px]">verified_user</span>
+          </span>
+          <div>
+            <p class="text-sm font-bold leading-none text-on-surface">30 días</p>
+            <p class="mt-1 text-[10px] uppercase tracking-wide text-on-surface-variant">de garantía</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Franja de confianza -->
+  <section class="border-y border-outline-variant bg-surface-container-low" aria-label="Por qué elegirnos">
+    <div class="mx-auto grid w-full max-w-container-max grid-cols-2 gap-px px-margin-mobile py-6 md:grid-cols-4 md:px-margin-desktop md:py-8">
+      <div class="flex items-center gap-3 px-2 py-3 md:px-4">
+        <span class="material-symbols-outlined text-[26px] text-primary" aria-hidden="true">engineering</span>
+        <div>
+          <p class="text-sm font-semibold text-on-surface">Técnicos expertos</p>
+          <p class="text-[11px] text-on-surface-variant">Reparación cuidadosa</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 border-l border-outline-variant/60 px-2 py-3 md:px-4">
+        <span class="material-symbols-outlined text-[26px] text-primary" aria-hidden="true">payments</span>
+        <div>
+          <p class="text-sm font-semibold text-on-surface">Precio claro</p>
+          <p class="text-[11px] text-on-surface-variant">Sin sorpresas</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 px-2 py-3 md:border-l md:border-outline-variant/60 md:px-4">
+        <span class="material-symbols-outlined text-[26px] text-primary" aria-hidden="true">schedule</span>
+        <div>
+          <p class="text-sm font-semibold text-on-surface">Respuesta rápida</p>
+          <p class="text-[11px] text-on-surface-variant">Te mantenemos al día</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 border-l border-outline-variant/60 px-2 py-3 md:px-4">
+        <span class="material-symbols-outlined text-[26px] text-primary" aria-hidden="true">handshake</span>
+        <div>
+          <p class="text-sm font-semibold text-on-surface">Trato cercano</p>
+          <p class="text-[11px] text-on-surface-variant">Estamos en el pueblo</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Productos destacados -->
+  <section class="py-16 md:py-24">
+    <div class="mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
+      <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div class="max-w-xl">
+          <p class="font-label-bold uppercase tracking-[0.16em] text-primary">Catálogo</p>
+          <h2 class="mt-2 text-headline-md text-on-surface md:text-[32px]">Productos destacados</h2>
+          <p class="mt-2 text-body-md text-on-surface-variant">Tecnología y accesorios seleccionados para acompañar tu día a día.</p>
+        </div>
+        <a href="/productos" class="group inline-flex shrink-0 items-center gap-2 rounded-lg text-sm font-semibold text-primary transition-colors hover:text-primary/80">
+          Ver todo el catálogo
+          <span class="material-symbols-outlined text-[20px] transition-transform group-hover:translate-x-1" aria-hidden="true">arrow_forward</span>
+        </a>
+      </div>
+
+      <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <% products.forEach((product, index) => { %>
+          <%- include('partials/product-card', { product, eager: index === 0 }) %>
+        <% }); %>
+      </div>
+
+      <p class="mt-6 flex items-start gap-2 text-body-sm text-on-surface-variant">
+        <span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true">info</span>
+        Catálogo de demostración: los productos, precios y disponibilidad son ficticios. No hay ventas ni pagos en línea.
+      </p>
+    </div>
+  </section>
+
+  <!-- Servicios -->
+  <section id="servicios" class="scroll-mt-24 bg-surface-container-low py-16 md:py-24">
+    <div class="mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="font-label-bold uppercase tracking-[0.16em] text-primary">Servicio técnico</p>
+        <h2 class="mt-2 text-headline-md text-on-surface md:text-[32px]">Lo que tu equipo necesita</h2>
+        <p class="mt-3 text-body-md text-on-surface-variant">Revisamos, diagnosticamos y reparamos con repuestos de calidad. Te contamos qué tiene tu equipo antes de intervenirlo.</p>
+      </div>
+
+      <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <% services.forEach((service) => { %>
+          <a href="/agendar?servicio=<%= encodeURIComponent(service.nombre) %>" class="group flex flex-col rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-clinic transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-clinic-lg">
+            <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-on-primary">
+              <span class="material-symbols-outlined text-[28px]" aria-hidden="true"><%= service.icono %></span>
+            </span>
+            <h3 class="mt-5 text-headline-sm text-on-surface"><%= service.nombre %></h3>
+            <p class="mt-2 flex-1 text-body-sm text-on-surface-variant"><%= service.descripcion %></p>
+            <div class="mt-5 flex items-center justify-between border-t border-outline-variant/60 pt-4">
+              <div>
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">Desde</p>
+                <p class="text-base font-bold text-primary"><%= formatCurrency(service.precio_desde) %></p>
+              </div>
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-surface-container text-primary transition-colors group-hover:bg-primary group-hover:text-on-primary" aria-hidden="true">
+                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+              </span>
+            </div>
+          </a>
+        <% }); %>
+      </div>
+
+      <p class="mt-6 text-center text-body-sm text-on-surface-variant">
+        Los precios son un estimado de demostración. El valor final depende del diagnóstico.
+      </p>
+    </div>
+  </section>
+
+  <!-- Cómo funciona -->
+  <section class="py-16 md:py-24">
+    <div class="mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
+      <div class="max-w-xl">
+        <p class="font-label-bold uppercase tracking-[0.16em] text-primary">Así de fácil</p>
+        <h2 class="mt-2 text-headline-md text-on-surface md:text-[32px]">Cómo funciona</h2>
+        <p class="mt-2 text-body-md text-on-surface-variant">De la solicitud a la entrega, siempre sabrás en qué va tu reparación.</p>
+      </div>
+
+      <ol class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <li class="relative rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-clinic">
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-base font-bold text-on-primary">1</span>
+          <h3 class="mt-4 text-base font-semibold text-on-surface">Cuéntanos qué pasa</h3>
+          <p class="mt-2 text-body-sm text-on-surface-variant">Agenda en línea o visítanos. Registramos el equipo y el problema.</p>
+        </li>
+        <li class="relative rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-clinic">
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-base font-bold text-on-primary">2</span>
+          <h3 class="mt-4 text-base font-semibold text-on-surface">Diagnóstico claro</h3>
+          <p class="mt-2 text-body-sm text-on-surface-variant">Revisamos el equipo y te explicamos qué tiene y cuánto cuesta.</p>
+        </li>
+        <li class="relative rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-clinic">
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-base font-bold text-on-primary">3</span>
+          <h3 class="mt-4 text-base font-semibold text-on-surface">Reparación cuidadosa</h3>
+          <p class="mt-2 text-body-sm text-on-surface-variant">Con tu aprobación, reparamos y probamos el equipo antes de entregarlo.</p>
+        </li>
+        <li class="relative rounded-2xl border border-primary/30 bg-primary/5 p-6 shadow-clinic ring-1 ring-primary/10">
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-base font-bold text-on-primary">4</span>
+          <h3 class="mt-4 text-base font-semibold text-on-surface">Listo para recoger</h3>
+          <p class="mt-2 text-body-sm text-on-surface-variant">Te avisamos, consultas tu ticket y pasas por el equipo cuando esté listo.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Seguimiento -->
+  <section class="pb-16 md:pb-24">
+    <div class="mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
+      <div class="relative overflow-hidden rounded-[2rem] border border-outline-variant bg-surface-container-lowest p-6 shadow-clinic md:p-10 lg:p-12">
+        <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/10 blur-3xl" aria-hidden="true"></div>
+        <div class="relative grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+          <div>
+            <p class="font-label-bold uppercase tracking-[0.16em] text-primary">Seguimiento</p>
+            <h2 class="mt-2 text-headline-md text-on-surface md:text-[32px]">Sigue el rastro de tu equipo</h2>
+            <p class="mt-3 max-w-lg text-body-md text-on-surface-variant">
+              Cuando registramos tu solicitud te damos un número de ticket. Úsalo para consultar el estado de la reparación en cualquier momento.
+            </p>
+
+            <form action="/seguimiento" method="get" class="mt-6" data-tracker-form>
+              <label for="codigo-home" class="label-clinic">Número de ticket</label>
+              <div class="flex flex-col gap-2 sm:flex-row">
+                <input
+                  id="codigo-home"
+                  name="codigo"
+                  type="text"
+                  class="input-clinic uppercase sm:flex-1"
+                  placeholder="Ej: CH-98234"
+                  autocomplete="off"
+                  spellcheck="false"
+                  maxlength="20"
+                  pattern="[A-Za-z0-9-]{3,20}"
+                  title="Ingresa el número de ticket, por ejemplo CH-98234"
+                  required
+                >
+                <button type="submit" class="btn-primary shrink-0 px-6 py-3">
+                  <span class="material-symbols-outlined text-[20px]" aria-hidden="true">search</span>
+                  Consultar
+                </button>
+              </div>
+            </form>
+
+            <div class="mt-4">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">Tickets de demostración</p>
+              <div class="mt-2 flex flex-wrap gap-2">
+                <% ['CH-98234', 'CH-10001', 'CH-10002', 'CH-10003'].forEach((code) => { %>
+                  <a href="/seguimiento?codigo=<%= code %>" class="rounded-full border border-outline-variant bg-surface-container-low px-3 py-1.5 text-xs font-medium text-on-surface-variant transition-colors hover:border-primary hover:text-primary">
+                    <%= code %>
+                  </a>
+                <% }); %>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-5 md:p-6" aria-label="Ejemplo de seguimiento">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">Ticket de ejemplo</p>
+                <p class="mt-0.5 font-mono text-sm font-bold text-on-surface">CH-98234</p>
+              </div>
+              <span class="rounded-full bg-[#dbeafe] px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-[#1e40af]">En revisión</span>
+            </div>
+            <div class="mt-4 rounded-xl border border-outline-variant bg-surface-container-lowest p-4">
+              <p class="text-sm font-semibold text-on-surface">Samsung Galaxy A54</p>
+              <p class="text-body-sm text-on-surface-variant">Pantalla rota · Diagnóstico</p>
+            </div>
+            <div class="mt-5">
+              <div class="relative">
+                <div class="h-2 overflow-hidden rounded-full bg-surface-container-high">
+                  <div class="h-full w-2/5 rounded-full bg-primary"></div>
+                </div>
+                <ol class="mt-3 grid grid-cols-4 gap-1 text-center text-[10px] font-medium text-on-surface-variant">
+                  <li class="text-primary">Recibido</li>
+                  <li class="text-primary">Revisión</li>
+                  <li>Reparación</li>
+                  <li>Listo</li>
+                </ol>
+              </div>
+            </div>
+            <p class="mt-4 flex items-start gap-1.5 text-[11px] text-on-surface-variant">
+              <span class="material-symbols-outlined text-[15px] text-primary" aria-hidden="true">info</span>
+              Ejemplo ilustrativo. Consulta tu ticket real para ver el estado actualizado.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ y garantía -->
+  <section class="border-y border-outline-variant bg-surface-container-low py-16 md:py-24">
+    <div class="mx-auto grid w-full max-w-container-max gap-10 px-margin-mobile md:px-margin-desktop lg:grid-cols-[1.4fr_0.9fr] lg:gap-16">
+      <div>
+        <p class="font-label-bold uppercase tracking-[0.16em] text-primary">Antes de venir</p>
+        <h2 class="mt-2 text-headline-md text-on-surface md:text-[32px]">Preguntas frecuentes</h2>
+        <div class="mt-6 divide-y divide-outline-variant/60 rounded-2xl border border-outline-variant bg-surface-container-lowest px-5">
+          <details class="group py-4">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-on-surface">
+              ¿Cuánto tarda una reparación?
+              <span class="material-symbols-outlined shrink-0 text-on-surface-variant transition-transform group-open:rotate-180" aria-hidden="true">expand_more</span>
+            </summary>
+            <p class="mt-3 text-body-sm text-on-surface-variant">Depende del diagnóstico y del repuesto. Muchos cambios de pantalla o batería se resuelven el mismo día; los casos de humedad o software pueden requerir más tiempo. Siempre te damos un plazo estimado después de revisar el equipo.</p>
+          </details>
+          <details class="group py-4">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-on-surface">
+              ¿Los repuestos tienen garantía?
+              <span class="material-symbols-outlined shrink-0 text-on-surface-variant transition-transform group-open:rotate-180" aria-hidden="true">expand_more</span>
+            </summary>
+            <p class="mt-3 text-body-sm text-on-surface-variant">Sí. Las reparaciones realizadas en Cellphone Hospital tienen una garantía de 30 días sobre la mano de obra y el repuesto instalado, siempre que el equipo no presente golpes, humedad o intervenciones externas posteriores.</p>
+          </details>
+          <details class="group py-4">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-on-surface">
+              ¿Debo agendar antes de ir a la tienda?
+              <span class="material-symbols-outlined shrink-0 text-on-surface-variant transition-transform group-open:rotate-180" aria-hidden="true">expand_more</span>
+            </summary>
+            <p class="mt-3 text-body-sm text-on-surface-variant">Puedes agendar en línea para dejar registrada tu solicitud, o visitarnos directamente en la Plaza Comercial La Campana. Agendar ayuda a que tengamos tu caso identificado y a que la atención sea más rápida.</p>
+          </details>
+          <details class="group py-4">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-on-surface">
+              ¿También reparan computadores y tablets?
+              <span class="material-symbols-outlined shrink-0 text-on-surface-variant transition-transform group-open:rotate-180" aria-hidden="true">expand_more</span>
+            </summary>
+            <p class="mt-3 text-body-sm text-on-surface-variant">Sí. Atendemos celulares, tablets y computadores. Si no estás seguro de la falla, escríbenos los síntomas al agendar y te orientamos antes de que lleves el equipo.</p>
+          </details>
+          <details class="group py-4">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-on-surface">
+              ¿Cómo consulto el estado de mi reparación?
+              <span class="material-symbols-outlined shrink-0 text-on-surface-variant transition-transform group-open:rotate-180" aria-hidden="true">expand_more</span>
+            </summary>
+            <p class="mt-3 text-body-sm text-on-surface-variant">Ingresa a <a class="rounded font-semibold text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary" href="/seguimiento">Estado del ticket</a> y escribe el número que te entregamos al registrar la solicitud, por ejemplo CH-98234. Verás el estado y el historial de tu reparación.</p>
+          </details>
+        </div>
+      </div>
+
+      <aside class="space-y-5">
+        <div class="rounded-2xl border border-primary/25 bg-primary/5 p-6">
+          <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-on-primary" aria-hidden="true">
+            <span class="material-symbols-outlined text-[26px]">verified_user</span>
+          </span>
+          <h3 class="mt-4 text-headline-sm text-on-surface">Garantía de 30 días</h3>
+          <p class="mt-2 text-body-sm text-on-surface-variant">Respaldamos la mano de obra y el repuesto instalado. Si algo no queda bien, revisamos tu equipo sin costo dentro del periodo de garantía.</p>
+          <ul class="mt-4 space-y-2 text-body-sm text-on-surface-variant">
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined filled text-[18px] text-primary" aria-hidden="true">check_circle</span> Repuestos probados antes de instalar</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined filled text-[18px] text-primary" aria-hidden="true">check_circle</span> Pruebas de funcionamiento al entregar</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined filled text-[18px] text-primary" aria-hidden="true">check_circle</span> Acompañamiento después del servicio</li>
+          </ul>
+        </div>
+
+        <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-6">
+          <h3 class="text-headline-sm text-on-surface">¿Necesitas ayuda?</h3>
+          <p class="mt-2 text-body-sm text-on-surface-variant">Escríbenos o visítanos. Con gusto revisamos tu caso antes de que decidas reparar.</p>
+          <div class="mt-4 space-y-2.5 text-body-sm text-on-surface-variant">
+            <p class="flex items-center gap-2"><span class="material-symbols-outlined text-[20px] text-primary" aria-hidden="true">call</span><%= business.phone %></p>
+            <p class="flex items-center gap-2"><span class="material-symbols-outlined text-[20px] text-primary" aria-hidden="true">mail</span><%= business.email %></p>
+          </div>
+          <a href="/agendar" class="btn-primary mt-5 w-full px-4 py-3 text-sm">Agendar diagnóstico</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Ubicación -->
+  <section class="py-16 md:py-24">
+    <div class="mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
+      <div class="relative overflow-hidden rounded-[2rem] bg-inverse-surface">
+        <img src="/assets/img/site/ubicacion-local.jpg" alt="Interior de la tienda Cellphone Hospital" class="absolute inset-0 h-full w-full object-cover opacity-40" loading="lazy" decoding="async">
+        <div class="absolute inset-0 bg-gradient-to-r from-inverse-surface via-inverse-surface/85 to-inverse-surface/30" aria-hidden="true"></div>
+        <div class="relative grid gap-8 p-7 md:p-12 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
+          <div class="max-w-xl">
+            <p class="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white/90">
+              <span class="material-symbols-outlined text-[15px]" aria-hidden="true">location_on</span>
+              Visítanos
+            </p>
+            <h2 class="mt-4 text-3xl font-bold leading-tight text-white md:text-4xl">Estamos en el corazón de San Francisco</h2>
+            <p class="mt-3 text-body-md text-white/80">Entra a la Plaza Comercial La Campana, Local 102. Te recibimos con un diagnóstico claro y café caliente.</p>
+            <div class="mt-6 space-y-2 text-body-sm text-white/85">
+              <p class="flex items-start gap-2"><span class="material-symbols-outlined text-[20px] text-primary-container" aria-hidden="true">storefront</span><%= business.address %><br><%= business.city %></p>
+              <p class="flex items-start gap-2"><span class="material-symbols-outlined text-[20px] text-primary-container" aria-hidden="true">schedule</span><%= business.hours %></p>
+            </div>
+            <a href="/ubicacion" class="mt-7 inline-flex items-center gap-2 rounded-xl bg-primary-container px-6 py-3.5 text-sm font-bold text-on-primary-container shadow-clinic transition-colors hover:bg-white">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">map</span>
+              Ver ubicación y mapa
+            </a>
+          </div>
+          <div class="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
+            <p class="flex items-center gap-2 text-sm font-semibold text-white">
+              <span class="material-symbols-outlined text-[20px] text-primary-container" aria-hidden="true">support_agent</span>
+              Atención personalizada
+            </p>
+            <p class="mt-2 text-body-sm text-white/75">Lunes a domingo, de 8:30 a.m. a 9:30 p.m. Si vienes por una reparación, trae el cargador y cuéntanos qué pasó con el equipo.</p>
+            <p class="mt-4 border-t border-white/15 pt-4 text-body-sm text-white/85"><%= business.phone %></p>
+            <p class="text-body-sm text-white/65"><%= business.email %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include('partials/footer') %>
+<%- include('partials/scripts') %>

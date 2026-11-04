@@ -1,0 +1,223 @@
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/assets/fonts/inter-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: block;
+  src: url('/assets/fonts/material-symbols-outlined.woff2') format('woff2');
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-on-surface font-sans antialiased;
+  }
+
+  ::selection {
+    @apply bg-primary-container text-on-primary-container;
+  }
+
+  :focus-visible {
+    outline: 3px solid theme('colors.primary-container');
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+
+  .material-symbols-outlined.filled {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+
+  .clinic-card {
+    @apply shadow-clinic transition duration-300 ease-out;
+  }
+
+  .clinic-card:hover {
+    @apply -translate-y-1 shadow-clinic-lg;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 font-label-bold text-on-primary transition-colors hover:bg-primary/90 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest px-6 py-3 font-label-bold text-primary transition-colors hover:bg-surface-container focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-label-bold text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary focus-visible:outline-none;
+  }
+
+  .input-clinic {
+    @apply w-full rounded-xl border border-outline-variant bg-white px-4 py-3 text-body-md text-on-surface placeholder:text-on-surface-variant/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25;
+  }
+
+  .label-clinic {
+    @apply mb-2 block font-label-bold text-on-surface;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-outline-variant bg-surface-container-lowest px-4 py-2 font-label-bold text-on-surface-variant transition-colors hover:border-primary hover:text-primary;
+  }
+
+  .chip-active {
+    @apply border-primary bg-primary text-on-primary hover:text-on-primary;
+  }
+
+  .skip-link {
+    @apply absolute left-4 top-4 z-[100] -translate-y-24 rounded-lg bg-primary px-4 py-2 font-label-bold text-on-primary transition-transform focus:translate-y-0;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .modal-dialog {
+    @apply w-full max-w-2xl rounded-2xl border border-outline-variant bg-surface-container-lowest p-0 text-on-surface shadow-clinic-xl;
+  }
+
+  .modal-dialog::backdrop {
+    background: rgba(11, 32, 21, 0.66);
+    backdrop-filter: blur(3px);
+  }
+
+  .modal-dialog[open] {
+    animation: slide-up 260ms ease-out both;
+  }
+
+  .toast {
+    @apply pointer-events-none fixed right-4 top-20 z-[1600] max-w-sm translate-y-2 rounded-xl bg-inverse-surface px-4 py-3 text-body-sm text-inverse-on-surface opacity-0 shadow-clinic-lg transition-all;
+  }
+
+  .toast.show {
+    @apply pointer-events-auto translate-y-0 opacity-100;
+  }
+
+  .demo-note {
+    @apply rounded-xl border border-[#abd9b8] bg-[#edf8f0] px-4 py-3 text-body-sm text-[#174a2c];
+  }
+
+  .timeline-line {
+    @apply absolute left-4 top-0 h-full w-0.5 bg-outline-variant md:left-0 md:top-5 md:h-0.5 md:w-full;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .print-only {
+    display: none;
+  }
+}
+
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  body {
+    font-size: 12pt;
+  }
+
+  a {
+    color: #000000 !important;
+    text-decoration: none !important;
+  }
+
+  .no-print,
+  header,
+  footer,
+  .toast,
+  .skip-link {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .shadow-clinic,
+  .shadow-clinic-lg,
+  .shadow-clinic-xl {
+    box-shadow: none !important;
+  }
+
+  section,
+  article,
+  .modal-dialog {
+    break-inside: avoid;
+  }
+
+  /* Comprobante de seguimiento: oculta el buscador y el panel lateral */
+  [data-ticket-search] {
+    display: none !important;
+  }
+
+  [data-ticket-aside] {
+    display: none !important;
+  }
+
+  #contenido {
+    padding-top: 0 !important;
+  }
+}

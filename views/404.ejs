@@ -1,0 +1,35 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main id="contenido" class="flex min-h-[60vh] items-center py-16">
+  <div class="mx-auto w-full max-w-container-max px-margin-mobile text-center md:px-margin-desktop">
+    <p class="font-mono text-6xl font-bold tracking-tight text-primary/20 md:text-8xl">404</p>
+    <span class="mx-auto mt-2 flex h-16 w-16 items-center justify-center rounded-full bg-surface-container text-primary" aria-hidden="true">
+      <span class="material-symbols-outlined text-[32px]">explore_off</span>
+    </span>
+    <h1 class="mt-5 text-[32px] font-bold leading-tight text-on-surface md:text-headline-lg">Esta página se perdió en el taller</h1>
+    <p class="mx-auto mt-3 max-w-lg text-body-md text-on-surface-variant">No encontramos la página que buscas. Puede que el enlace haya cambiado o que la dirección esté mal escrita.</p>
+    <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+      <a href="/" class="btn-primary px-6 py-3">
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">home</span>
+        Volver al inicio
+      </a>
+      <a href="/productos" class="btn-secondary px-6 py-3">
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">storefront</span>
+        Ver productos
+      </a>
+    </div>
+    <div class="mx-auto mt-10 max-w-lg rounded-2xl border border-outline-variant bg-surface-container-low p-5 text-left">
+      <p class="text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">También puedes ir a</p>
+      <div class="mt-3 grid gap-2 text-body-sm sm:grid-cols-2">
+        <a href="/agendar" class="rounded-lg bg-surface-container-lowest px-3 py-2.5 font-medium text-on-surface transition-colors hover:text-primary">Agendar reparación</a>
+        <a href="/seguimiento" class="rounded-lg bg-surface-container-lowest px-3 py-2.5 font-medium text-on-surface transition-colors hover:text-primary">Consultar ticket</a>
+        <a href="/ubicacion" class="rounded-lg bg-surface-container-lowest px-3 py-2.5 font-medium text-on-surface transition-colors hover:text-primary">Ubicación</a>
+        <a href="/admin" class="rounded-lg bg-surface-container-lowest px-3 py-2.5 font-medium text-on-surface transition-colors hover:text-primary">Panel administrativo</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+<%- include('partials/scripts') %>

@@ -1,0 +1,23 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main id="contenido" class="flex min-h-[60vh] items-center py-16">
+  <div class="mx-auto w-full max-w-container-max px-margin-mobile text-center md:px-margin-desktop">
+    <span class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-error-container text-on-error-container" aria-hidden="true">
+      <span class="material-symbols-outlined text-[32px]">error</span>
+    </span>
+    <h1 class="mt-5 text-[32px] font-bold leading-tight text-on-surface md:text-headline-lg">Algo no salió como esperábamos</h1>
+    <p class="mx-auto mt-3 max-w-lg text-body-md text-on-surface-variant"><%= message %></p>
+    <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+      <a href="/" class="btn-primary px-6 py-3">
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">home</span>
+        Volver al inicio
+      </a>
+      <a href="/agendar" class="btn-secondary px-6 py-3">Agendar reparación</a>
+    </div>
+    <p class="mt-8 text-xs text-on-surface-variant">Si el problema continúa, visítanos en la tienda o escríbenos a <span class="font-medium text-on-surface"><%= business.email %></span>.</p>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+<%- include('partials/scripts') %>

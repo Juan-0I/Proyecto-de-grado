@@ -1,0 +1,199 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main id="contenido">
+  <section class="border-b border-outline-variant bg-surface-container-low py-10 md:py-14">
+    <div class="mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
+      <nav class="flex items-center gap-1.5 text-xs text-on-surface-variant" aria-label="Ruta de navegación">
+        <a href="/" class="rounded transition-colors hover:text-primary">Inicio</a>
+        <span class="material-symbols-outlined text-[14px]" aria-hidden="true">chevron_right</span>
+        <span class="font-medium text-on-surface" aria-current="page">Ubicación y contacto</span>
+      </nav>
+      <div class="mt-4 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+        <div class="max-w-2xl">
+          <h1 class="text-[32px] font-bold leading-tight tracking-tight text-on-surface md:text-headline-lg">Visítanos en San Francisco</h1>
+          <p class="mt-2 text-body-md text-on-surface-variant">Estamos en la Plaza Comercial La Campana, Local 102. Ven a conocer los productos, dejar tu equipo o simplemente saludar.</p>
+        </div>
+        <a href="/agendar" class="btn-primary w-fit px-6 py-3.5 text-sm">
+          <span class="material-symbols-outlined text-[20px]" aria-hidden="true">build</span>
+          Agendar antes de venir
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-10 md:py-14">
+    <div class="mx-auto grid w-full max-w-container-max gap-8 px-margin-mobile md:px-margin-desktop lg:grid-cols-[1.35fr_0.85fr] lg:items-start lg:gap-10">
+      <div class="space-y-6">
+        <div class="overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-clinic">
+          <div class="flex flex-col gap-2 border-b border-outline-variant p-5 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-start gap-3">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary" aria-hidden="true">
+                <span class="material-symbols-outlined text-[22px]">location_on</span>
+              </span>
+              <div>
+                <h2 class="text-base font-semibold text-on-surface"><%= business.address %></h2>
+                <p class="text-body-sm text-on-surface-variant"><%= business.city %></p>
+              </div>
+            </div>
+            <p class="flex items-center gap-1.5 text-xs font-medium text-on-surface-variant">
+              <span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">map</span>
+              Mapa interactivo
+            </p>
+          </div>
+          <div class="aspect-[4/3] w-full bg-surface-container sm:aspect-[16/10]">
+            <iframe
+              src="<%= business.mapEmbed %>"
+              title="Mapa de ubicación de Cellphone Hospital en Cl. 4 #6-75, San Francisco de Sales"
+              class="h-full w-full border-0"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="border-t border-outline-variant bg-surface-container-low p-4">
+            <p class="flex items-start gap-2 text-body-sm text-on-surface-variant">
+              <span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true">info</span>
+              El mapa se muestra integrado como referencia. Los enlaces externos a Google Maps permanecerán desactivados hasta la publicación final del sitio.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-5 shadow-clinic">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary" aria-hidden="true">
+              <span class="material-symbols-outlined text-[22px]">directions_walk</span>
+            </span>
+            <h2 class="mt-3 text-base font-semibold text-on-surface">Cómo llegar</h2>
+            <ol class="mt-3 space-y-2.5 text-body-sm text-on-surface-variant">
+              <li class="flex gap-2"><span class="font-bold text-primary">1.</span> Ubica la Plaza Comercial La Campana sobre la Calle 4.</li>
+              <li class="flex gap-2"><span class="font-bold text-primary">2.</span> Entra por la recepción principal del centro comercial.</li>
+              <li class="flex gap-2"><span class="font-bold text-primary">3.</span> Busca el Local 102. Pregunta por Cellphone Hospital.</li>
+            </ol>
+          </div>
+
+          <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-5 shadow-clinic">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary" aria-hidden="true">
+              <span class="material-symbols-outlined text-[22px]">schedule</span>
+            </span>
+            <h2 class="mt-3 text-base font-semibold text-on-surface">Horario de atención</h2>
+            <dl class="mt-3 space-y-1.5 text-body-sm">
+              <div class="flex items-center justify-between gap-3">
+                <dt class="text-on-surface-variant">Lunes a viernes</dt>
+                <dd class="font-medium text-on-surface">8:30 a.m. – 9:30 p.m.</dd>
+              </div>
+              <div class="flex items-center justify-between gap-3">
+                <dt class="text-on-surface-variant">Sábados y domingos</dt>
+                <dd class="font-medium text-on-surface">8:30 a.m. – 9:30 p.m.</dd>
+              </div>
+              <div class="flex items-center justify-between gap-3 border-t border-outline-variant/60 pt-2">
+                <dt class="text-on-surface-variant">Festivos</dt>
+                <dd class="font-medium text-on-surface">8:30 a.m. – 6:00 p.m.</dd>
+              </div>
+            </dl>
+            <p class="mt-3 text-[11px] text-on-surface-variant">Horario de demostración. Confirma por teléfono antes de desplazarte.</p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-5 shadow-clinic md:p-6">
+          <h2 class="text-headline-sm text-on-surface">¿Qué puedes hacer en la tienda?</h2>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            <div class="flex items-start gap-3 rounded-xl bg-surface-container-low p-3">
+              <span class="material-symbols-outlined text-[22px] text-primary" aria-hidden="true">smartphone</span>
+              <div>
+                <p class="text-sm font-semibold text-on-surface">Diagnóstico en sitio</p>
+                <p class="text-[11px] text-on-surface-variant">Revisamos tu equipo y te explicamos la falla.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 rounded-xl bg-surface-container-low p-3">
+              <span class="material-symbols-outlined text-[22px] text-primary" aria-hidden="true">storefront</span>
+              <div>
+                <p class="text-sm font-semibold text-on-surface">Productos en exhibición</p>
+                <p class="text-[11px] text-on-surface-variant">Conoce accesorios y tecnología disponible.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 rounded-xl bg-surface-container-low p-3">
+              <span class="material-symbols-outlined text-[22px] text-primary" aria-hidden="true">handyman</span>
+              <div>
+                <p class="text-sm font-semibold text-on-surface">Reparaciones</p>
+                <p class="text-[11px] text-on-surface-variant">Pantallas, baterías, humedad y software.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 rounded-xl bg-surface-container-low p-3">
+              <span class="material-symbols-outlined text-[22px] text-primary" aria-hidden="true">support_agent</span>
+              <div>
+                <p class="text-sm font-semibold text-on-surface">Asesoría personalizada</p>
+                <p class="text-[11px] text-on-surface-variant">Te ayudamos a elegir lo que necesitas.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="space-y-5 lg:sticky lg:top-24">
+        <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-5 shadow-clinic md:p-6">
+          <h2 class="text-headline-sm text-on-surface">Contacto</h2>
+          <ul class="mt-4 space-y-4 text-body-sm">
+            <li class="flex items-start gap-3">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary" aria-hidden="true">
+                <span class="material-symbols-outlined text-[20px]">call</span>
+              </span>
+              <div>
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">Teléfono / WhatsApp</p>
+                <p class="mt-0.5 font-medium text-on-surface"><%= business.phone %></p>
+                <p class="text-[11px] text-on-surface-variant">Enlace directo disponible próximamente.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary" aria-hidden="true">
+                <span class="material-symbols-outlined text-[20px]">mail</span>
+              </span>
+              <div>
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">Correo</p>
+                <p class="mt-0.5 font-medium text-on-surface"><%= business.email %></p>
+                <p class="text-[11px] text-on-surface-variant">Escríbenos y te respondemos lo antes posible.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary" aria-hidden="true">
+                <span class="material-symbols-outlined text-[20px]">public</span>
+              </span>
+              <div>
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">Facebook</p>
+                <p class="mt-0.5 font-medium text-on-surface"><%= business.facebookName %></p>
+                <p class="text-[11px] text-on-surface-variant">Enlace disponible próximamente.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary" aria-hidden="true">
+                <span class="material-symbols-outlined text-[20px]">location_on</span>
+              </span>
+              <div>
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">Dirección</p>
+                <p class="mt-0.5 font-medium text-on-surface"><%= business.address %></p>
+                <p class="text-[11px] text-on-surface-variant"><%= business.city %></p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="rounded-2xl border border-primary/25 bg-primary/5 p-5">
+          <h2 class="text-base font-semibold text-on-surface">Agenda y evita esperas</h2>
+          <p class="mt-2 text-body-sm text-on-surface-variant">Registra tu solicitud en línea y llega con tu ticket. Te contactaremos para confirmar el día y la hora.</p>
+          <a href="/agendar" class="btn-primary mt-4 w-full px-4 py-3 text-sm">Agendar reparación</a>
+          <a href="/seguimiento" class="btn-secondary mt-2 w-full px-4 py-3 text-sm">Consultar un ticket</a>
+        </div>
+
+        <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-5">
+          <p class="flex items-start gap-2 text-[11px] leading-relaxed text-on-surface-variant">
+            <span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">info</span>
+            Los enlaces a teléfono, WhatsApp, Facebook y Google Maps se activarán en la versión final. Por ahora la información se muestra como texto y el mapa funciona integrado.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<%- include('partials/footer') %>
+<%- include('partials/scripts') %>

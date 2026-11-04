@@ -1,0 +1,46 @@
+<%
+  const productHref = `/productos?producto=${encodeURIComponent(product.slug)}`;
+%>
+<article class="group flex h-full flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-clinic transition duration-300 hover:-translate-y-1 hover:shadow-clinic-lg">
+  <a
+    href="<%= productHref %>"
+    class="relative block aspect-[4/3] overflow-hidden bg-surface-container"
+    <%= typeof modal !== 'undefined' && modal ? `data-product-open="${product.slug}"` : '' %>
+    aria-label="Ver detalles de <%= product.nombre %>"
+  >
+    <img
+      src="<%= product.imagen %>"
+      alt="<%= product.nombre %>"
+      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+      loading="<%= typeof eager !== 'undefined' && eager ? 'eager' : 'lazy' %>"
+      decoding="async"
+      onerror="this.onerror=null;this.src='/assets/img/productos/placeholder.svg';"
+    >
+    <span class="absolute left-3 top-3 rounded-full bg-surface-container-lowest/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant shadow-sm">Demo</span>
+    <% if (product.destacado) { %>
+      <span class="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-on-primary shadow-sm">
+        <span class="material-symbols-outlined filled text-[13px]" aria-hidden="true">star</span>
+        Destacado
+      </span>
+    <% } %>
+  </a>
+  <div class="flex flex-1 flex-col p-4 md:p-5">
+    <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-primary"><%= product.categoria %></p>
+    <h3 class="mt-1.5 text-base font-semibold leading-snug text-on-surface">
+      <a href="<%= productHref %>" class="rounded transition-colors hover:text-primary" <%= typeof modal !== 'undefined' && modal ? `data-product-open="${product.slug}"` : '' %>><%= product.nombre %></a>
+    </h3>
+    <p class="mt-2 line-clamp-2 text-body-sm text-on-surface-variant"><%= product.descripcion %></p>
+    <div class="mt-auto flex items-end justify-between gap-2 pt-4">
+      <div>
+        <p class="text-lg font-bold text-primary"><%= formatCurrency(product.precio) %></p>
+        <p class="mt-0.5 flex items-center gap-1 text-[11px] text-on-surface-variant">
+          <span class="inline-block h-1.5 w-1.5 rounded-full <%= product.stock > 0 ? 'bg-primary-container' : 'bg-error' %>" aria-hidden="true"></span>
+          <%= product.stock > 0 ? 'Disponible en tienda' : 'Agotado por ahora' %>
+        </p>
+      </div>
+      <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-container text-primary transition-colors group-hover:bg-primary group-hover:text-on-primary" aria-hidden="true">
+        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+      </span>
+    </div>
+  </div>
+</article>

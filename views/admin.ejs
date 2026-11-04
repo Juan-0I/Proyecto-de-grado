@@ -1,0 +1,432 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<%
+  const totalRepairs = repairs.length;
+  const inWorkshop = repairs.filter((repair) => !['ENTREGADO', 'CANCELADO'].includes(repair.estado)).length;
+  const readyRepairs = repairs.filter((repair) => repair.estado === 'LISTO').length;
+  const activeProducts = products.filter((product) => product.activo).length;
+%>
+
+<main id="contenido" class="bg-surface-container-low">
+  <% if (!authed) { %>
+    <section class="flex min-h-[calc(100vh-72px)] items-center justify-center px-margin-mobile py-12 md:px-margin-desktop">
+      <div class="w-full max-w-md">
+        <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-clinic-lg md:p-8">
+          <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-on-primary" aria-hidden="true">
+            <span class="material-symbols-outlined text-[28px]">admin_panel_settings</span>
+          </span>
+          <h1 class="mt-5 text-center text-2xl font-bold text-on-surface">Panel administrativo</h1>
+          <p class="mt-2 text-center text-body-sm text-on-surface-variant">Ingresa la contraseña para gestionar reparaciones y productos.</p>
+
+          <% if (loginError) { %>
+            <div class="mt-5 flex items-start gap-2 rounded-xl border border-error/30 bg-error-container p-3 text-body-sm text-on-error-container" role="alert">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">error</span>
+              <p><%= loginError %></p>
+            </div>
+          <% } %>
+
+          <form action="/admin/login" method="post" class="mt-6">
+            <label for="password" class="label-clinic">Contraseña</label>
+            <div class="relative">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                class="input-clinic pr-12"
+                placeholder="••••••••"
+                autocomplete="current-password"
+                required
+                autofocus
+              >
+              <button type="button" class="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container" data-password-toggle aria-label="Mostrar contraseña">
+                <span class="material-symbols-outlined text-[20px]" data-password-icon aria-hidden="true">visibility</span>
+              </button>
+            </div>
+            <button type="submit" class="btn-primary mt-4 w-full px-4 py-3">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">login</span>
+              Iniciar sesión
+            </button>
+          </form>
+
+          <% if (adminDemoHint) { %>
+            <p class="mt-4 rounded-xl border border-outline-variant bg-surface-container-low p-3 text-center text-body-sm text-on-surface-variant">
+              Contraseña de demostración: <strong class="font-mono text-on-surface">admin123</strong>
+            </p>
+          <% } %>
+          <p class="mt-4 flex items-start gap-2 text-[11px] text-on-surface-variant">
+            <span class="material-symbols-outlined text-[16px] text-primary" aria-hidden="true">lock</span>
+            Acceso de demostración académica. En producción se deben usar cuentas por usuario y una contraseña segura.
+          </p>
+        </div>
+        <p class="mt-5 text-center text-xs text-on-surface-variant">
+          <a href="/" class="rounded font-semibold text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">Volver al sitio público</a>
+        </p>
+      </div>
+    </section>
+  <% } else { %>
+
+    <section class="border-b border-outline-variant bg-surface-container-lowest py-6">
+      <div class="mx-auto flex w-full max-w-container-max flex-col justify-between gap-4 px-margin-mobile sm:flex-row sm:items-center md:px-margin-desktop">
+        <div>
+          <p class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+            <span class="h-2 w-2 rounded-full bg-primary-container" aria-hidden="true"></span>
+            Sesión activa
+          </p>
+          <h1 class="mt-1 text-2xl font-bold text-on-surface md:text-headline-md">Panel administrativo</h1>
+          <p class="mt-1 text-body-sm text-on-surface-variant">Gestiona el estado de las reparaciones y el catálogo de productos.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="/" class="btn-secondary px-4 py-2.5 text-sm">
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">open_in_new</span>
+            Ver sitio
+          </a>
+          <form action="/admin/logout" method="post">
+            <button type="submit" class="inline-flex items-center gap-2 rounded-xl border border-error/25 bg-error-container/60 px-4 py-2.5 text-sm font-semibold text-on-error-container transition-colors hover:bg-error-container">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">logout</span>
+              Cerrar sesión
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-8 md:py-10">
+      <div class="mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
+        <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-4 shadow-clinic md:p-5">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">Reparaciones</p>
+              <span class="material-symbols-outlined text-[20px] text-primary" aria-hidden="true">build</span>
+            </div>
+            <p class="mt-2 text-3xl font-bold text-on-surface"><%= totalRepairs %></p>
+            <p class="text-[11px] text-on-surface-variant">Tickets registrados</p>
+          </div>
+          <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-4 shadow-clinic md:p-5">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">En taller</p>
+              <span class="material-symbols-outlined text-[20px] text-[#b45309]" aria-hidden="true">handyman</span>
+            </div>
+            <p class="mt-2 text-3xl font-bold text-on-surface"><%= inWorkshop %></p>
+            <p class="text-[11px] text-on-surface-variant">En proceso activo</p>
+          </div>
+          <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-4 shadow-clinic md:p-5">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">Listos</p>
+              <span class="material-symbols-outlined text-[20px] text-primary" aria-hidden="true">check_circle</span>
+            </div>
+            <p class="mt-2 text-3xl font-bold text-on-surface"><%= readyRepairs %></p>
+            <p class="text-[11px] text-on-surface-variant">Para entregar</p>
+          </div>
+          <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-4 shadow-clinic md:p-5">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">Productos</p>
+              <span class="material-symbols-outlined text-[20px] text-primary" aria-hidden="true">inventory_2</span>
+            </div>
+            <p class="mt-2 text-3xl font-bold text-on-surface"><%= activeProducts %></p>
+            <p class="text-[11px] text-on-surface-variant">Activos de <%= products.length %></p>
+          </div>
+        </div>
+
+        <div class="mt-8 flex gap-1 rounded-xl border border-outline-variant bg-surface-container-lowest p-1.5 shadow-clinic" role="tablist" aria-label="Secciones del panel">
+          <button type="button" class="flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors" role="tab" id="tab-reparaciones" aria-controls="panel-reparaciones" aria-selected="true" data-admin-tab="reparaciones">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">build</span>
+            Reparaciones
+            <span class="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-bold text-primary"><%= totalRepairs %></span>
+          </button>
+          <button type="button" class="flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors" role="tab" id="tab-productos" aria-controls="panel-productos" aria-selected="false" data-admin-tab="productos">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">inventory_2</span>
+            Productos
+            <span class="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-bold text-primary"><%= products.length %></span>
+          </button>
+        </div>
+
+        <!-- Reparaciones -->
+        <div id="panel-reparaciones" role="tabpanel" aria-labelledby="tab-reparaciones" class="mt-6" data-admin-panel="reparaciones">
+          <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-4 shadow-clinic md:p-5">
+            <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div class="flex w-full flex-col gap-2 sm:flex-row lg:max-w-xl">
+                <div class="relative flex-1">
+                  <label for="repair-search" class="sr-only">Buscar reparación</label>
+                  <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant" aria-hidden="true">search</span>
+                  <input id="repair-search" type="search" class="input-clinic pl-11" placeholder="Buscar ticket, cliente o equipo..." autocomplete="off" data-repair-search>
+                </div>
+                <div>
+                  <label for="repair-status-filter" class="sr-only">Filtrar por estado</label>
+                  <select id="repair-status-filter" class="input-clinic sm:w-48" data-repair-status-filter>
+                    <option value="todos">Todos los estados</option>
+                    <% REPAIR_STATUSES.forEach((status) => { %>
+                      <option value="<%= status.value %>"><%= status.label %></option>
+                    <% }); %>
+                  </select>
+                </div>
+              </div>
+              <p class="text-body-sm text-on-surface-variant" aria-live="polite">
+                <span id="repairs-count"><%= totalRepairs %></span> de <%= totalRepairs %> tickets
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-4 space-y-3" data-repairs-list>
+            <% repairs.forEach((repair) => { %>
+              <%
+                const status = getStatusInfo(repair.estado);
+                const searchText = `${repair.codigo} ${repair.nombre} ${repair.dispositivo} ${repair.servicio} ${repair.problema}`.toLowerCase();
+              %>
+              <article class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-4 shadow-clinic md:p-5" data-repair-row data-status="<%= repair.estado %>" data-search="<%= searchText %>">
+                <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                  <div class="min-w-0 flex-1">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span class="font-mono text-sm font-bold text-on-surface"><%= repair.codigo %></span>
+                      <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide <%= status.className %>">
+                        <span class="h-1 w-1 rounded-full bg-current" aria-hidden="true"></span>
+                        <%= status.label %>
+                      </span>
+                      <span class="text-[11px] text-on-surface-variant"><%= formatDateTime(repair.actualizado_en) %></span>
+                    </div>
+                    <div class="mt-2 grid gap-x-6 gap-y-1 text-body-sm sm:grid-cols-2 xl:grid-cols-4">
+                      <p class="truncate"><span class="text-on-surface-variant">Cliente:</span> <strong class="font-medium text-on-surface"><%= repair.nombre %></strong></p>
+                      <p class="truncate"><span class="text-on-surface-variant">Equipo:</span> <strong class="font-medium text-on-surface"><%= repair.dispositivo %></strong></p>
+                      <p class="truncate"><span class="text-on-surface-variant">Servicio:</span> <strong class="font-medium text-on-surface"><%= repair.servicio %></strong></p>
+                      <p class="truncate"><span class="text-on-surface-variant">Tel:</span> <strong class="font-medium text-on-surface"><%= repair.telefono %></strong></p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-outline-variant bg-surface-container-low px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary/5"
+                    data-open-status
+                    data-code="<%= repair.codigo %>"
+                    data-status="<%= repair.estado %>"
+                    data-device="<%= repair.dispositivo %>"
+                  >
+                    <span class="material-symbols-outlined text-[18px]" aria-hidden="true">edit</span>
+                    Actualizar estado
+                  </button>
+                </div>
+              </article>
+            <% }); %>
+          </div>
+
+          <div id="repairs-empty" class="mt-4 hidden rounded-2xl border border-dashed border-outline-variant bg-surface-container-lowest p-10 text-center">
+            <span class="material-symbols-outlined text-[32px] text-on-surface-variant" aria-hidden="true">search_off</span>
+            <p class="mt-2 text-headline-sm text-on-surface">No hay tickets con esos filtros</p>
+            <p class="mt-1 text-body-sm text-on-surface-variant">Prueba con otro estado o limpia la búsqueda.</p>
+          </div>
+        </div>
+
+        <!-- Productos -->
+        <div id="panel-productos" role="tabpanel" aria-labelledby="tab-productos" class="mt-6 hidden" data-admin-panel="productos">
+          <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-4 shadow-clinic md:p-5">
+            <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div class="flex w-full flex-col gap-2 sm:flex-row lg:max-w-xl">
+                <div class="relative flex-1">
+                  <label for="product-admin-search" class="sr-only">Buscar producto</label>
+                  <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant" aria-hidden="true">search</span>
+                  <input id="product-admin-search" type="search" class="input-clinic pl-11" placeholder="Buscar producto..." autocomplete="off" data-admin-product-search>
+                </div>
+                <div>
+                  <label for="product-admin-category" class="sr-only">Filtrar por categoría</label>
+                  <select id="product-admin-category" class="input-clinic sm:w-48" data-admin-product-category>
+                    <option value="todas">Todas las categorías</option>
+                    <% CATEGORIAS.forEach((categoria) => { %>
+                      <option value="<%= categoria %>"><%= categoria %></option>
+                    <% }); %>
+                  </select>
+                </div>
+              </div>
+              <button type="button" class="btn-primary shrink-0 px-4 py-2.5 text-sm" data-open-product>
+                <span class="material-symbols-outlined text-[20px]" aria-hidden="true">add</span>
+                Nuevo producto
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3" data-admin-products-list>
+            <% products.forEach((product) => { %>
+              <%
+                const searchText = `${product.nombre} ${product.slug} ${product.categoria} ${product.descripcion}`.toLowerCase();
+              %>
+              <article class="flex gap-3 rounded-2xl border border-outline-variant bg-surface-container-lowest p-3 shadow-clinic <%= product.activo ? '' : 'opacity-70' %>" data-admin-product data-category="<%= product.categoria %>" data-search="<%= searchText %>">
+                <div class="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-surface-container">
+                  <img src="<%= product.imagen %>" alt="" class="h-full w-full object-cover" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/assets/img/productos/placeholder.svg';">
+                </div>
+                <div class="flex min-w-0 flex-1 flex-col">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="min-w-0">
+                      <p class="text-[10px] font-semibold uppercase tracking-wider text-primary"><%= product.categoria %></p>
+                      <h3 class="truncate text-sm font-semibold text-on-surface" title="<%= product.nombre %>"><%= product.nombre %></h3>
+                    </div>
+                    <span class="shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide <%= product.activo ? 'bg-primary/10 text-primary' : 'bg-surface-container text-on-surface-variant' %>"><%= product.activo ? 'Activo' : 'Inactivo' %></span>
+                  </div>
+                  <p class="mt-0.5 truncate font-mono text-[10px] text-on-surface-variant"><%= product.slug %></p>
+                  <div class="mt-auto flex items-end justify-between gap-2 pt-2">
+                    <div>
+                      <p class="text-sm font-bold text-primary"><%= formatCurrency(product.precio) %></p>
+                      <p class="text-[10px] text-on-surface-variant">Stock: <%= product.stock %><%= product.destacado ? ' · Destacado' : '' %></p>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <button type="button" class="flex h-8 w-8 items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary" data-edit-product="<%= product.id %>" aria-label="Editar <%= product.nombre %>">
+                        <span class="material-symbols-outlined text-[18px]" aria-hidden="true">edit</span>
+                      </button>
+                      <% if (product.activo) { %>
+                        <button type="button" class="flex h-8 w-8 items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-error-container hover:text-on-error-container" data-delete-product="<%= product.id %>" data-name="<%= product.nombre %>" aria-label="Desactivar <%= product.nombre %>">
+                          <span class="material-symbols-outlined text-[18px]" aria-hidden="true">delete</span>
+                        </button>
+                      <% } %>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            <% }); %>
+          </div>
+
+          <div id="products-admin-empty" class="mt-4 hidden rounded-2xl border border-dashed border-outline-variant bg-surface-container-lowest p-10 text-center">
+            <span class="material-symbols-outlined text-[32px] text-on-surface-variant" aria-hidden="true">search_off</span>
+            <p class="mt-2 text-headline-sm text-on-surface">No hay productos con esos filtros</p>
+            <p class="mt-1 text-body-sm text-on-surface-variant">Cambia la búsqueda o crea un producto nuevo.</p>
+          </div>
+
+          <p class="mt-5 flex items-start gap-2 rounded-xl border border-outline-variant bg-surface-container-low p-4 text-body-sm text-on-surface-variant">
+            <span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true">info</span>
+            Desactivar un producto lo oculta del catálogo público sin borrar su historial. Los cambios se reflejan de inmediato.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Diálogo: actualizar estado -->
+    <dialog id="status-dialog" class="modal-dialog max-w-lg" aria-labelledby="status-dialog-title">
+      <form method="dialog" class="flex items-center justify-between border-b border-outline-variant px-5 py-4">
+        <div>
+          <h2 id="status-dialog-title" class="text-lg font-bold text-on-surface">Actualizar estado</h2>
+          <p class="text-body-sm text-on-surface-variant">Ticket <span id="status-code" class="font-mono font-semibold text-on-surface">—</span></p>
+        </div>
+        <button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container" data-dialog-close aria-label="Cerrar">
+          <span class="material-symbols-outlined text-[22px]" aria-hidden="true">close</span>
+        </button>
+      </form>
+      <form id="status-form" class="p-5">
+        <p id="status-summary" class="rounded-xl bg-surface-container-low p-3 text-body-sm text-on-surface-variant"></p>
+        <div class="mt-4">
+          <label for="status-select" class="label-clinic">Nuevo estado</label>
+          <div class="relative">
+            <select id="status-select" name="estado" class="input-clinic appearance-none pr-10" required>
+              <% REPAIR_STATUSES.forEach((status) => { %>
+                <option value="<%= status.value %>"><%= status.label %></option>
+              <% }); %>
+            </select>
+            <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant" aria-hidden="true">expand_more</span>
+          </div>
+        </div>
+        <div class="mt-3">
+          <label for="status-note" class="label-clinic">Nota para el historial <span class="font-normal text-on-surface-variant">(opcional)</span></label>
+          <textarea id="status-note" name="nota" rows="3" class="input-clinic resize-y" maxlength="500" placeholder="Ej: Se reemplazó la pantalla y se probó el táctil."></textarea>
+        </div>
+        <p id="status-error" class="mt-3 hidden rounded-lg bg-error-container p-2 text-xs font-medium text-on-error-container" role="alert"></p>
+        <div class="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <button type="button" class="btn-secondary px-4 py-2.5 text-sm" data-dialog-close>Cancelar</button>
+          <button type="submit" class="btn-primary px-4 py-2.5 text-sm" data-status-submit>
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">save</span>
+            Guardar estado
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Diálogo: producto -->
+    <dialog id="product-dialog" class="modal-dialog max-w-2xl" aria-labelledby="product-dialog-title">
+      <form method="dialog" class="flex items-center justify-between border-b border-outline-variant px-5 py-4">
+        <div>
+          <h2 id="product-dialog-title" class="text-lg font-bold text-on-surface">Nuevo producto</h2>
+          <p class="text-body-sm text-on-surface-variant">Completa los datos del catálogo.</p>
+        </div>
+        <button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container" data-dialog-close aria-label="Cerrar">
+          <span class="material-symbols-outlined text-[22px]" aria-hidden="true">close</span>
+        </button>
+      </form>
+      <form id="product-form" class="max-h-[75vh] overflow-y-auto p-5">
+        <input type="hidden" id="pf-id" name="id">
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="sm:col-span-2">
+            <label for="pf-nombre" class="label-clinic">Nombre <span class="text-error" aria-hidden="true">*</span></label>
+            <input id="pf-nombre" name="nombre" type="text" class="input-clinic" maxlength="120" required>
+          </div>
+          <div>
+            <label for="pf-slug" class="label-clinic">Slug <span class="font-normal text-on-surface-variant">(opcional)</span></label>
+            <input id="pf-slug" name="slug" type="text" class="input-clinic font-mono text-sm" maxlength="80" placeholder="se-genera-automatico">
+          </div>
+          <div>
+            <label for="pf-categoria" class="label-clinic">Categoría <span class="text-error" aria-hidden="true">*</span></label>
+            <div class="relative">
+              <select id="pf-categoria" name="categoria" class="input-clinic appearance-none pr-10" required>
+                <% CATEGORIAS.forEach((categoria) => { %>
+                  <option value="<%= categoria %>"><%= categoria %></option>
+                <% }); %>
+              </select>
+              <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant" aria-hidden="true">expand_more</span>
+            </div>
+          </div>
+          <div class="sm:col-span-2">
+            <label for="pf-descripcion" class="label-clinic">Descripción <span class="text-error" aria-hidden="true">*</span></label>
+            <textarea id="pf-descripcion" name="descripcion" rows="3" class="input-clinic resize-y" maxlength="600" required></textarea>
+          </div>
+          <div>
+            <label for="pf-precio" class="label-clinic">Precio (COP) <span class="text-error" aria-hidden="true">*</span></label>
+            <input id="pf-precio" name="precio" type="number" class="input-clinic" min="0" step="100" required>
+          </div>
+          <div>
+            <label for="pf-stock" class="label-clinic">Stock <span class="text-error" aria-hidden="true">*</span></label>
+            <input id="pf-stock" name="stock" type="number" class="input-clinic" min="0" step="1" required>
+          </div>
+          <div class="sm:col-span-2">
+            <label for="pf-imagen" class="label-clinic">Imagen</label>
+            <input id="pf-imagen" name="imagen" type="text" class="input-clinic text-sm" placeholder="/assets/img/productos/placeholder.svg" maxlength="300" data-image-input>
+            <div class="mt-2 flex items-center gap-3">
+              <img id="pf-image-preview" src="/assets/img/productos/placeholder.svg" alt="Vista previa de la imagen" class="h-16 w-24 rounded-lg border border-outline-variant object-cover">
+              <p class="text-[11px] text-on-surface-variant">Usa una ruta <code class="rounded bg-surface-container px-1">/assets/...</code> o una URL https. Si se deja vacío se usa la imagen de referencia.</p>
+            </div>
+          </div>
+          <label class="flex cursor-pointer items-center gap-2 rounded-xl border border-outline-variant bg-surface-container-low p-3 text-sm text-on-surface">
+            <input id="pf-destacado" name="destacado" type="checkbox" class="h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary">
+            Destacado en el catálogo
+          </label>
+          <label class="flex cursor-pointer items-center gap-2 rounded-xl border border-outline-variant bg-surface-container-low p-3 text-sm text-on-surface">
+            <input id="pf-activo" name="activo" type="checkbox" class="h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary" checked>
+            Producto activo
+          </label>
+        </div>
+        <p id="product-error" class="mt-3 hidden rounded-lg bg-error-container p-2 text-xs font-medium text-on-error-container" role="alert"></p>
+        <div class="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <button type="button" class="btn-secondary px-4 py-2.5 text-sm" data-dialog-close>Cancelar</button>
+          <button type="submit" class="btn-primary px-4 py-2.5 text-sm" data-product-submit>
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">save</span>
+            Guardar producto
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Diálogo: desactivar producto -->
+    <dialog id="delete-dialog" class="modal-dialog max-w-md" aria-labelledby="delete-dialog-title">
+      <div class="p-6">
+        <span class="flex h-12 w-12 items-center justify-center rounded-full bg-error-container text-on-error-container" aria-hidden="true">
+          <span class="material-symbols-outlined text-[26px]">warning</span>
+        </span>
+        <h2 id="delete-dialog-title" class="mt-4 text-lg font-bold text-on-surface">Desactivar producto</h2>
+        <p class="mt-2 text-body-sm text-on-surface-variant">El producto <strong id="delete-name" class="text-on-surface"></strong> dejará de aparecer en el catálogo público. Podrás volver a activarlo editándolo.</p>
+        <div class="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <button type="button" class="btn-secondary px-4 py-2.5 text-sm" data-dialog-close>Cancelar</button>
+          <button type="button" class="inline-flex items-center justify-center gap-2 rounded-xl bg-error px-4 py-2.5 text-sm font-semibold text-on-error transition-colors hover:bg-error/90" data-confirm-delete>
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">delete</span>
+            Desactivar
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <script type="application/json" id="admin-products-data"><%- JSON.stringify(products).replace(/</g, '\\u003c') %></script>
+  <% } %>
+</main>
+
+<%- include('partials/footer') %>
+<%- include('partials/scripts', { pageScript: authed ? 'admin' : null }) %>

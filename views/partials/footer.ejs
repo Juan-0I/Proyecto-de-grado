@@ -1,0 +1,103 @@
+<footer class="mt-20 border-t border-outline-variant bg-surface-container-lowest print:hidden">
+  <div class="mx-auto w-full max-w-container-max px-margin-mobile py-12 md:px-margin-desktop md:py-16">
+    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+      <div class="lg:col-span-1">
+        <a href="/" class="inline-flex items-center gap-2.5 rounded-lg" aria-label="Cellphone Hospital, ir al inicio">
+          <img src="/assets/img/site/logo.svg" alt="" width="44" height="44" class="h-11 w-11 rounded-xl" loading="lazy" decoding="async">
+          <span class="text-lg font-bold tracking-tight text-on-surface">Cellphone Hospital</span>
+        </a>
+        <p class="mt-4 max-w-xs text-body-sm text-on-surface-variant">
+          Tecnología con corazón colombiano. Reparamos tus equipos con diagnóstico claro, repuestos de calidad y garantía.
+        </p>
+        <p class="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#fef9c3] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-[#854d0e]">
+          <span class="h-1.5 w-1.5 rounded-full bg-[#CE1126]" aria-hidden="true"></span>
+          Orgullo colombiano
+        </p>
+      </div>
+
+      <div>
+        <h2 class="font-label-bold uppercase tracking-wider text-on-surface-variant">Contacto</h2>
+        <ul class="mt-4 space-y-3 text-body-sm">
+          <li class="flex items-start gap-2.5 text-on-surface-variant">
+            <span class="material-symbols-outlined mt-0.5 text-[20px] text-primary" aria-hidden="true">location_on</span>
+            <span><%= business.address %><br><%= business.city %></span>
+          </li>
+          <li class="flex items-start gap-2.5 text-on-surface-variant">
+            <span class="material-symbols-outlined mt-0.5 text-[20px] text-primary" aria-hidden="true">call</span>
+            <% if (linksActive) { %>
+              <a class="rounded transition-colors hover:text-primary" href="tel:+<%= business.phoneRaw %>"><%= business.phone %></a>
+            <% } else { %>
+              <span><%= business.phone %></span>
+            <% } %>
+          </li>
+          <li class="flex items-start gap-2.5 text-on-surface-variant">
+            <span class="material-symbols-outlined mt-0.5 text-[20px] text-primary" aria-hidden="true">mail</span>
+            <% if (linksActive) { %>
+              <a class="rounded transition-colors hover:text-primary" href="mailto:<%= business.email %>"><%= business.email %></a>
+            <% } else { %>
+              <span><%= business.email %></span>
+            <% } %>
+          </li>
+          <li class="flex items-start gap-2.5 text-on-surface-variant">
+            <span class="material-symbols-outlined mt-0.5 text-[20px] text-primary" aria-hidden="true">schedule</span>
+            <span><%= business.hours %></span>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="font-label-bold uppercase tracking-wider text-on-surface-variant">Explora</h2>
+        <ul class="mt-4 space-y-2.5 text-body-sm">
+          <li><a class="rounded text-on-surface-variant transition-colors hover:text-primary" href="/">Inicio</a></li>
+          <li><a class="rounded text-on-surface-variant transition-colors hover:text-primary" href="/productos">Productos y accesorios</a></li>
+          <li><a class="rounded text-on-surface-variant transition-colors hover:text-primary" href="/agendar">Agendar reparación</a></li>
+          <li><a class="rounded text-on-surface-variant transition-colors hover:text-primary" href="/seguimiento">Consultar ticket</a></li>
+          <li><a class="rounded text-on-surface-variant transition-colors hover:text-primary" href="/ubicacion">Ubicación y contacto</a></li>
+          <li><a class="rounded text-on-surface-variant transition-colors hover:text-primary" href="/admin">Panel administrativo</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="font-label-bold uppercase tracking-wider text-on-surface-variant">Servicios</h2>
+        <ul class="mt-4 space-y-2.5 text-body-sm text-on-surface-variant">
+          <li>Cambio de pantallas</li>
+          <li>Cambio de baterías</li>
+          <li>Tratamiento por humedad</li>
+          <li>Software y respaldos</li>
+        </ul>
+        <div class="mt-5 flex items-center gap-2">
+          <span class="material-symbols-outlined text-[20px] text-primary" aria-hidden="true">verified_user</span>
+          <span class="text-body-sm text-on-surface-variant">Garantía de 30 días en reparaciones</span>
+        </div>
+        <div class="mt-4">
+          <% if (linksActive) { %>
+            <a class="inline-flex items-center gap-2 rounded-full border border-outline-variant px-3 py-1.5 text-body-sm font-medium text-primary transition-colors hover:border-primary" href="<%= business.facebookUrl %>" target="_blank" rel="noopener noreferrer">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">public</span>
+              Facebook
+            </a>
+          <% } else { %>
+            <p class="inline-flex items-center gap-2 rounded-full border border-outline-variant px-3 py-1.5 text-body-sm font-medium text-on-surface-variant">
+              <span class="material-symbols-outlined text-[18px] text-primary" aria-hidden="true">public</span>
+              <%= business.facebookName %>
+            </p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-10 rounded-2xl border border-[#abd9b8] bg-[#edf8f0] p-4 text-body-sm text-[#174a2c]">
+      <p class="flex items-start gap-2">
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">info</span>
+        <span><strong>Sitio de demostración académica.</strong> Los productos, precios, servicios y tickets son ficticios. La información de contacto se muestra sin enlaces activos mientras el sitio está en revisión.</span>
+      </p>
+    </div>
+
+    <div class="mt-8 flex flex-col items-center justify-between gap-3 border-t border-outline-variant pt-6 text-center text-body-sm text-on-surface-variant sm:flex-row sm:text-left">
+      <p>© <%= year %> Cellphone Hospital. Todos los derechos reservados.</p>
+      <p class="flex items-center gap-1.5">
+        Hecho en Colombia
+        <span class="material-symbols-outlined filled text-[16px] text-[#CE1126]" aria-hidden="true">favorite</span>
+      </p>
+    </div>
+  </div>
+</footer>

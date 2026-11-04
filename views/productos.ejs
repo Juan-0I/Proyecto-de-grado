@@ -1,0 +1,162 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<%
+  const productData = products.map((product) => ({
+    slug: product.slug,
+    nombre: product.nombre,
+    categoria: product.categoria,
+    descripcion: product.descripcion,
+    precio: product.precio,
+    precioTexto: formatCurrency(product.precio),
+    stock: product.stock,
+    imagen: product.imagen,
+    destacado: Boolean(product.destacado)
+  }));
+%>
+
+<main id="contenido">
+  <section class="border-b border-outline-variant bg-surface-container-low py-10 md:py-14">
+    <div class="mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
+      <nav class="flex items-center gap-1.5 text-xs text-on-surface-variant" aria-label="Ruta de navegación">
+        <a href="/" class="rounded transition-colors hover:text-primary">Inicio</a>
+        <span class="material-symbols-outlined text-[14px]" aria-hidden="true">chevron_right</span>
+        <span class="font-medium text-on-surface" aria-current="page">Productos</span>
+      </nav>
+      <div class="mt-4 flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
+        <div class="max-w-2xl">
+          <h1 class="text-[32px] font-bold leading-tight tracking-tight text-on-surface md:text-headline-lg">Productos y accesorios</h1>
+          <p class="mt-2 text-body-md text-on-surface-variant">Tecnología, audio y accesorios disponibles en la tienda. Explora el catálogo y consulta los detalles de cada producto.</p>
+        </div>
+        <p class="demo-note flex max-w-md items-start gap-2">
+          <span class="material-symbols-outlined text-[18px]" aria-hidden="true">info</span>
+          <span>Catálogo de demostración. Los productos y precios son ficticios y no se realizan ventas en línea.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-10 md:py-14">
+    <div class="mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
+      <div class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-4 shadow-clinic md:p-6">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div class="w-full lg:max-w-sm">
+            <label for="buscar-producto" class="sr-only">Buscar productos</label>
+            <div class="relative">
+              <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant" aria-hidden="true">search</span>
+              <input
+                id="buscar-producto"
+                type="search"
+                class="input-clinic pl-11 pr-10"
+                placeholder="Buscar por nombre o categoría..."
+                autocomplete="off"
+                data-product-search
+              >
+              <button type="button" class="absolute right-2 top-1/2 hidden -translate-y-1/2 rounded-full p-1.5 text-on-surface-variant transition-colors hover:bg-surface-container hover:text-on-surface" data-clear-search aria-label="Borrar búsqueda">
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">close</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-2" role="group" aria-label="Filtrar por categoría">
+            <button type="button" class="chip chip-active" data-category-filter="todas" aria-pressed="true">Todas</button>
+            <% categories.forEach((categoria) => { %>
+              <button type="button" class="chip" data-category-filter="<%= categoria %>" aria-pressed="false"><%= categoria %></button>
+            <% }); %>
+          </div>
+        </div>
+
+        <div class="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-outline-variant/60 pt-4">
+          <p class="text-body-sm text-on-surface-variant" aria-live="polite">
+            Mostrando <strong id="resultado-count" class="text-on-surface"><%= products.length %></strong> de <strong class="text-on-surface"><%= products.length %></strong> productos
+          </p>
+          <button type="button" class="hidden items-center gap-1.5 rounded-lg px-2 py-1 text-body-sm font-semibold text-primary transition-colors hover:bg-primary/5" data-reset-filters>
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">filter_list</span>
+            Limpiar filtros
+          </button>
+        </div>
+      </div>
+
+      <div id="productos-grid" class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <% products.forEach((product, index) => { %>
+          <div
+            class="producto-item"
+            data-product-card
+            data-category="<%= product.categoria %>"
+            data-search="<%= `${product.nombre} ${product.categoria} ${product.descripcion}`.toLowerCase() %>"
+          >
+            <%- include('partials/product-card', { product, modal: true, eager: index < 4 }) %>
+          </div>
+        <% }); %>
+      </div>
+
+      <div id="productos-vacio" class="mt-8 hidden rounded-2xl border border-dashed border-outline-variant bg-surface-container-low p-10 text-center md:p-16">
+        <span class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-surface-container text-on-surface-variant" aria-hidden="true">
+          <span class="material-symbols-outlined text-[32px]">search_off</span>
+        </span>
+        <h2 class="mt-4 text-headline-sm text-on-surface">Ups! No hay más productos con esos filtros.</h2>
+        <p class="mx-auto mt-2 max-w-md text-body-sm text-on-surface-variant">Prueba con otra categoría, cambia las palabras de búsqueda o vuelve a ver todo el catálogo.</p>
+        <button type="button" class="btn-primary mt-6 px-5 py-3 text-sm" data-reset-filters>
+          <span class="material-symbols-outlined text-[20px]" aria-hidden="true">restart_alt</span>
+          Ver todos los productos
+        </button>
+      </div>
+
+      <p class="mt-8 flex items-start gap-2 rounded-xl border border-outline-variant bg-surface-container-low p-4 text-body-sm text-on-surface-variant">
+        <span class="material-symbols-outlined text-[20px] text-primary" aria-hidden="true">storefront</span>
+        <span>Los productos son de exhibición. Si te interesa uno, visítanos en la tienda para conocer disponibilidad, colores y modelos. <a href="/ubicacion" class="rounded font-semibold text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">Ver ubicación</a>.</span>
+      </p>
+    </div>
+  </section>
+
+  <dialog id="producto-dialog" class="modal-dialog max-w-3xl" aria-labelledby="producto-titulo" aria-describedby="producto-descripcion">
+    <div class="relative">
+      <img id="producto-imagen" src="/assets/img/productos/placeholder.svg" alt="" class="aspect-[16/10] w-full object-cover md:aspect-[16/9]" width="900" height="506">
+      <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" aria-hidden="true"></div>
+      <button type="button" class="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-lowest/95 text-on-surface shadow-clinic transition-colors hover:bg-surface-container" data-dialog-close aria-label="Cerrar detalles del producto">
+        <span class="material-symbols-outlined text-[22px]" aria-hidden="true">close</span>
+      </button>
+      <span id="producto-categoria" class="absolute bottom-3 left-4 rounded-full bg-surface-container-lowest/95 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-primary shadow-sm"></span>
+    </div>
+    <div class="p-5 md:p-7">
+      <div class="flex flex-wrap items-start justify-between gap-3">
+        <h2 id="producto-titulo" class="text-2xl font-bold leading-tight text-on-surface md:text-headline-md"></h2>
+        <span class="rounded-full bg-[#fef9c3] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#854d0e]">Demo</span>
+      </div>
+      <p id="producto-descripcion" class="mt-3 text-body-md text-on-surface-variant"></p>
+
+      <div class="mt-5 grid gap-3 rounded-xl border border-outline-variant bg-surface-container-low p-4 sm:grid-cols-2">
+        <div>
+          <p class="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">Precio de referencia</p>
+          <p id="producto-precio" class="mt-0.5 text-xl font-bold text-primary"></p>
+        </div>
+        <div class="sm:border-l sm:border-outline-variant sm:pl-4">
+          <p class="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">Disponibilidad</p>
+          <p id="producto-stock" class="mt-1 flex items-center gap-1.5 text-body-sm font-medium text-on-surface"></p>
+        </div>
+      </div>
+
+      <p class="mt-4 flex items-start gap-2 rounded-xl border border-[#abd9b8] bg-[#edf8f0] p-3 text-body-sm text-[#174a2c]">
+        <span class="material-symbols-outlined text-[18px]" aria-hidden="true">info</span>
+        Producto de demostración. No hay carrito, reservas ni pagos en línea. Consulta disponibilidad directamente en la tienda.
+      </p>
+
+      <div class="mt-5 flex flex-col gap-2 sm:flex-row">
+        <a href="/agendar" class="btn-primary flex-1 px-4 py-3 text-sm">
+          <span class="material-symbols-outlined text-[20px]" aria-hidden="true">build</span>
+          Agendar diagnóstico
+        </a>
+        <a href="/ubicacion" class="btn-secondary flex-1 px-4 py-3 text-sm">
+          <span class="material-symbols-outlined text-[20px]" aria-hidden="true">location_on</span>
+          Cómo llegar
+        </a>
+      </div>
+      <p class="mt-3 text-center text-[11px] text-on-surface-variant">Enlace directo: copia la dirección del navegador para compartir este producto.</p>
+    </div>
+  </dialog>
+</main>
+
+<script type="application/json" id="productos-data"><%- JSON.stringify(productData).replace(/</g, '\\u003c') %></script>
+
+<%- include('partials/footer') %>
+<%- include('partials/scripts', { pageScript: 'productos' }) %>
