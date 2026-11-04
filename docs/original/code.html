@@ -1,0 +1,424 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Cellphone Hospital | Dale vida a tus dispositivos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary": "#ffffff",
+                    "inverse-primary": "#4ae183",
+                    "primary-fixed": "#6bfe9c",
+                    "on-tertiary-fixed-variant": "#43474a",
+                    "on-primary-fixed-variant": "#005228",
+                    "background": "#f4fafd",
+                    "outline-variant": "#bbcbbb",
+                    "inverse-surface": "#2b3234",
+                    "on-secondary-fixed": "#191c1d",
+                    "surface-container-high": "#e2e9ec",
+                    "surface-bright": "#f4fafd",
+                    "on-surface": "#161d1f",
+                    "on-primary-fixed": "#00210c",
+                    "tertiary-fixed-dim": "#c4c7ca",
+                    "on-tertiary-container": "#414548",
+                    "on-secondary-container": "#626566",
+                    "on-background": "#161d1f",
+                    "tertiary-container": "#b0b3b6",
+                    "secondary": "#5c5f60",
+                    "on-error-container": "#93000a",
+                    "surface": "#f4fafd",
+                    "secondary-container": "#e1e3e4",
+                    "primary-container": "#2ecc71",
+                    "surface-tint": "#006d37",
+                    "secondary-fixed-dim": "#c5c7c8",
+                    "error-container": "#ffdad6",
+                    "primary": "#006d37",
+                    "surface-container-highest": "#dde4e6",
+                    "on-error": "#ffffff",
+                    "surface-container": "#e8eff1",
+                    "tertiary-fixed": "#e0e3e6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#e1e3e4",
+                    "inverse-on-surface": "#ebf2f4",
+                    "primary-fixed-dim": "#4ae183",
+                    "on-primary-container": "#005027",
+                    "on-tertiary": "#ffffff",
+                    "surface-dim": "#d4dbdd",
+                    "on-surface-variant": "#3d4a3e",
+                    "surface-variant": "#dde4e6",
+                    "tertiary": "#5b5f62",
+                    "error": "#ba1a1a",
+                    "surface-container-low": "#eef5f7",
+                    "on-secondary-fixed-variant": "#454748",
+                    "on-tertiary-fixed": "#181c1e",
+                    "outline": "#6c7b6d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "margin-mobile": "20px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "label-mono": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-bold": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-mono": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-bold": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .clinic-card {
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .clinic-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.08);
+        }
+        .text-glow {
+            text-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
+        }
+        .asymmetric-shape {
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="w-full flex items-center justify-between px-4 sm:px-6 md:px-8 py-3.5 bg-surface/95 backdrop-blur-md sticky top-0 z-50 border-b border-outline-variant/20"><div class="flex items-center gap-2 shrink-0"><span class="text-2xl leading-none flex items-center select-none">📱</span><span class="text-on-surface text-base sm:text-lg md:text-xl font-bold tracking-tight whitespace-nowrap">Cellphone Hospital</span></div><nav class="hidden md:flex items-center gap-4 lg:gap-6 text-xs md:text-sm font-medium text-on-surface-variant shadow-md bg-white/90 backdrop-blur-md"><a class="text-primary font-bold transition-colors whitespace-nowrap" href="#">Inicio</a><a class="hover:text-primary transition-colors whitespace-nowrap" href="#">Servicios</a><a class="hover:text-primary transition-colors whitespace-nowrap" href="#">Productos</a><a class="hover:text-primary transition-colors whitespace-nowrap" href="#">Estado de Reparación</a></nav><div class="flex items-center gap-2 shrink-0"><a href="#location" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-on-primary text-xs sm:text-sm font-semibold hover:bg-primary/90 transition-colors shrink-0"><span class="material-symbols-outlined text-[18px]">location_on</span><span class="hidden sm:inline">Ubicación</span></a><button aria-label="Menú" class="flex md:hidden size-9 items-center justify-center rounded-lg text-on-surface hover:bg-surface-container"><span class="material-symbols-outlined text-2xl">menu</span></button></div></header>
+<main class="overflow-x-hidden">
+<!-- Hero Section: Dynamic & Overlapping -->
+<section class="relative min-h-[751px] flex items-center justify-center py-16 md:py-32">
+<!-- Background Decoration -->
+<div class="absolute inset-0 z-0 opacity-10 overflow-hidden pointer-events-none">
+<div class="absolute top-10 -left-20 w-96 h-96 bg-primary rounded-full blur-[120px]"></div>
+<div class="absolute bottom-20 -right-20 w-[500px] h-[500px] bg-primary-container rounded-full blur-[150px]"></div>
+</div>
+<div class="container max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
+<!-- Text Content -->
+<div class="md:col-span-6 lg:col-span-7 z-30 relative">
+<div class="flex items-center gap-3 mb-6">
+<span class="inline-block bg-primary-container text-on-primary-container px-4 py-1 rounded-full font-label-bold text-xs animate-pulse">
+                                CLÍNICA TECNOLÓGICA
+                            </span>
+<span class="inline-block bg-[#FCD116] text-[#003893] px-3 py-1 rounded-full font-label-bold text-[10px] uppercase tracking-wider flex items-center gap-1 shadow-sm">
+<span class="block w-2 h-2 rounded-full bg-[#CE1126]"></span>
+                                100% Talento Local
+                            </span>
+</div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-6 leading-tight">
+                            Tecnología con <span class="text-primary underline decoration-primary-container decoration-4 underline-offset-4">corazón colombiano</span>
+</h1>
+<p class="font-body-lg text-body-lg text-secondary mb-10 max-w-xl">
+                            Soporte técnico con talento nacional. Encuentra lo último en tecnología y las mejores reparaciones en un solo lugar, con la calidez y calidad que nos caracteriza.
+                        </p>
+<div class="flex flex-col sm:flex-row gap-4 relative z-30"><button class="bg-primary hover:bg-primary/90 text-on-primary px-8 py-4 rounded-xl font-headline-sm flex items-center justify-center gap-3 clinic-card transition-all"><span class="material-symbols-outlined">build</span>Agendar Reparación</button><button class="bg-surface-container-lowest hover:bg-surface-container border border-outline-variant text-primary px-8 py-4 rounded-xl font-headline-sm flex items-center justify-center gap-3 clinic-card transition-all"><span class="material-symbols-outlined">explore</span>Ver Productos</button></div>
+</div>
+<!-- Overlapping Visual Element -->
+<div class="md:col-span-6 lg:col-span-5 relative mt-16 md:mt-0 z-10">
+<div class="relative w-full aspect-square md:aspect-[4/5]">
+<!-- Main Hero Image -->
+<div class="absolute top-0 right-0 w-4/5 h-4/5 rounded-2xl overflow-hidden clinic-card z-20 border-4 border-white">
+<div class="w-full h-full bg-cover bg-center" data-alt="A warm, inviting repair setting with a friendly technician." style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDCE0Jz0ELISCqymu525pC8H54-NKH1CXBJ0rZI1xQcMovwC_3hgu4xDjFcA4nk5u7msHSEA41yrB_GRXYRHl0N282w7KBR3WSciDHuswcSMUhH_40nCTD7pxjL2dwnbVhE9RqjHOoCtLz-aEFSzwRS2s_fW6pSwHzmPaUq42ka2Q20JEg19hjPrO1F30EyeN6GXjbMVKDf9y0M5IHPy3ZCdGjA46W8ChSdS8bgj0l7EBnyscjWOoURzA&quot;);"></div>
+</div>
+<!-- Overlapping Decoration 1 -->
+<div class="absolute bottom-0 left-0 w-1/2 h-1/2 rounded-2xl overflow-hidden clinic-card border-4 border-white z-10">
+<div class="w-full h-full bg-cover bg-center" data-alt="Close-up shot of several modern gadgets including an Amazon Alexa speaker and high-speed memory cards resting on a minimalist white desk. The lighting is soft and natural, emphasizing the sleek textures of the products. A single green succulent plant in the background adds a touch of freshness and aligns with the digital wellness theme." style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuB8szXWlHtx5LnkSUZ413fAuYK8xBhIg-sANOqsTnRgO5sh1Km07vaTv65GJv3Dks9_fvJVhdiWvD8lcIctC5YXeyVDi2PgKC7dxbnKuCF4XQJmPfXyAwkTF-pJiVSbe2vaf6fl0rLNzKZIkgXIkATVKPtlN-dXBUzIu_bbhvmzIfUen8rRYfNyQaNBEN0ghND-aW4gFbhM-M2L2Pz3V90Tj7s5WGmJYxqkRAtC87k9tBItuMLeJu2Q-g&quot;);"></div>
+</div>
+<!-- Decorative Floating Icon -->
+<div class="absolute -top-4 -right-4 bg-primary-container p-6 rounded-full shadow-lg z-40 animate-bounce">
+<span class="material-symbols-outlined text-on-primary-container text-4xl">verified</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Section -->
+<section class="py-12 bg-surface-container-low border-y border-outline-variant">
+<div class="container max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter text-center">
+<div>
+<div class="font-headline-lg text-primary mb-1">15k+</div>
+<div class="font-label-bold text-secondary">EQUIPOS SALVADOS</div>
+</div>
+<div>
+<div class="font-headline-lg text-primary mb-1">100%</div>
+<div class="font-label-bold text-secondary">GARANTÍA LOCAL</div>
+</div>
+<div>
+<div class="font-headline-lg text-primary mb-1">24h</div>
+<div class="font-label-bold text-secondary">SERVICIO RÁPIDO</div>
+</div>
+<div>
+<div class="font-headline-lg text-primary mb-1">4.9/5</div>
+<div class="font-label-bold text-secondary">RATING CLIENTES</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Products: Bento-style Grid -->
+<section class="py-24 bg-surface">
+<div class="container max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+<div class="max-w-2xl">
+<h2 class="font-headline-md text-headline-md mb-4">Productos Destacados</h2>
+<p class="font-body-md text-secondary">Tecnología de punta seleccionada por nuestros expertos para mejorar tu estilo de vida digital.</p>
+</div>
+<a class="text-primary font-label-bold flex items-center gap-2 hover:underline" href="#">
+                        Ver todo el catálogo <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-gutter h-[800px] md:h-[600px]">
+<!-- Alexa Card (Large) -->
+<div class="md:col-span-2 md:row-span-2 relative rounded-2xl overflow-hidden group clinic-card">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Speakers with a warm, local vibe." style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCBUw-3ojQR7asGrgx4IArnVrva87aKTjmHWpGRRkvlNJ04COtX1OebcRlM7ja7ASO500iSVo7ehs8Avbz6OmbKcymYlkFw0frLDfW2soBUDGrGRMxH519Y7lopj-jkoLiYD0h8QhsOaLTXEn5M3CEXuOskGbjarwC9WhoQdXl025E4i0HxU2Ol6JS36oqt4K0rxGIQ9kbsvD4NlweFm_C3ToPxr3S1iaCNLoE451Fm1HSp4wdf48xiAw&quot;);"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-8">
+<span class="text-primary-fixed font-label-bold mb-2">AUDIO PREMIUM</span>
+<h3 class="text-on-primary font-headline-md mb-2">Parlantes Inteligentes</h3>
+<p class="text-surface-variant font-body-sm mb-4">El mejor sonido para tus rumbas y reuniones en casa.</p>
+<div class="flex items-center justify-between">
+<span class="text-primary-fixed font-headline-sm">$150.000+</span>
+<button class="bg-primary-container text-on-primary-container p-3 rounded-xl"><span class="material-symbols-outlined">shopping_cart</span></button>
+</div>
+</div>
+</div>
+<!-- Gameboys Card -->
+<div class="md:col-span-2 md:row-span-1 relative rounded-2xl overflow-hidden group clinic-card">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="A collection of restored vintage Nintendo Gameboys in various vibrant colors like translucent purple, neon green, and classic grey. They are arranged artistically on a clean white surface under bright, even lighting that highlights their mint condition. The style is nostalgic yet polished and professional, fitting for a premium repair shop." style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCJ_FBBsXQnyeVceRUuyX0hj8jBNRMviGjsNoZVnxdJ0p6DwLob84kR0hbJfQJDHwnGVlqmPxjGMQyUFTM-imCYUJl3_LLFo1XPzP_ajSTUJwPAWhB-yL7FBj84adKUFhjxWazFxOhpqbCYU8evJNQrvWgn1al0KFkm4yExJ_WfRM7FfgWcCWcg1ARN8hIXfKQSXtlSDsTPnp8EI2-OvxhD95a_nTolE7LLK7iTqbmCdc2PMCz1Ss1cIg&quot;);"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent flex flex-col justify-center p-8">
+<h3 class="text-on-primary font-headline-sm mb-1">Consolas Retro</h3>
+<p class="text-surface-variant font-body-sm mb-4">Ediciones restauradas con cariño local.</p>
+<span class="text-primary-fixed font-headline-sm">Desde $250.000</span>
+</div>
+</div>
+<!-- Memory Cards Card -->
+<div class="md:col-span-1 md:row-span-1 relative rounded-2xl overflow-hidden group clinic-card">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Extreme close-up of several high-performance microSD cards and full-size SD cards laid out in a geometric pattern. The focus is sharp on the technical specifications and branding, with vibrant green accents in the background light. The look is ultra-high-definition and conveys speed and reliability." style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuAmc8wabvPTmu_ty273XlxXHqT1aGSGfmw6qbHiw5h6eKX5oNhWZSVFQQV6cypSSD1glGwZlmehzbhRienOKHuQj5XrMJcWfgR-X26p4JAiPWK0xPgJvLZcRu8_X3PtkgsYUUi8Mhy_DYQ5Iy00kGoNXROrRkjJsNfuucpUJtYaXFmJyaY4UQ3OLUQAN-ULj2NUmAJxdW0uZQGbpf1h64tijM9GfO62ucBOg9RHpKJPyvwCvpCenmiNwQ&quot;);"></div>
+<div class="absolute inset-0 bg-black/40 flex flex-col justify-end p-6 group-hover:bg-black/20 transition-colors">
+<h3 class="text-on-primary font-label-bold mb-1">Memoria &amp; SSD</h3>
+<span class="text-primary-fixed font-body-sm">$50.000+</span>
+</div>
+</div>
+<!-- Accessories / More -->
+<div class="md:col-span-1 md:row-span-1 bg-primary flex flex-col items-center justify-center p-6 rounded-2xl text-center clinic-card">
+<span class="material-symbols-outlined text-on-primary text-5xl mb-4">add_circle</span>
+<h3 class="text-on-primary font-headline-sm mb-2">Accesorios</h3>
+<p class="text-on-primary/80 font-body-sm">Cargadores, protectores y más.</p>
+<button class="mt-4 bg-white text-primary px-4 py-2 rounded-lg font-label-bold text-xs uppercase tracking-widest">Explorar</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Repair Tracker: Interactive Component -->
+<section class="py-24 bg-surface-container-low overflow-hidden">
+<div class="container max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="bg-surface-container-lowest rounded-[2rem] p-8 md:p-16 relative border border-outline-variant clinic-card overflow-hidden">
+<!-- Tech background effect -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
+<div class="max-w-2xl mx-auto text-center"><h2 class="font-headline-md text-headline-md mb-4">Sigue el Rastro de tu Equipo</h2><p class="font-body-md text-secondary mb-8 max-w-xl mx-auto">Transparencia total. Ingresa tu número de orden para ver cómo nuestros técnicos le devuelven la vida a tu dispositivo.</p><div class="space-y-6 text-left"><div class="relative"><label class="block font-label-bold text-on-surface mb-2 text-center sm:text-left">Número de Ticket</label><div class="flex flex-col sm:flex-row gap-3 w-full"><input class="w-full flex-1 bg-white border border-outline-variant rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Ej: CH-98234" type="text"><button class="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-bold flex items-center justify-center gap-2 hover:bg-opacity-90 transition-all flex-shrink-0"><span class="material-symbols-outlined text-lg">search</span>Consultar</button></div></div><div class="pt-6 space-y-4 bg-surface-container-low p-6 rounded-2xl border border-outline-variant/20"><div class="flex justify-between items-center mb-2"><span class="font-label-bold">Estado actual:</span><span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-xs font-label-bold">EN REVISIÓN</span></div><div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden"><div class="bg-primary h-full w-1/3 rounded-full"></div></div><div class="flex justify-between text-[10px] font-label-bold text-secondary uppercase tracking-tighter"><span class="">Recibido</span><span class="text-primary">Revisión</span><span class="">Reparación</span><span class="">Listo</span></div></div></div></div>
+</div>
+</div>
+</section>
+<!-- Services List -->
+<section class="py-24">
+<div class="container max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center mb-16">
+<h2 class="font-headline-md text-headline-md mb-4">Nuestros Servicios</h2>
+<div class="w-20 h-1 bg-primary mx-auto rounded-full"></div>
+</div>
+<div class="container max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop overflow-x-auto pb-8">
+<div class="grid grid-cols-1 gap-gutter w-full">
+<!-- Service 1 -->
+<div class="flex-1 bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant clinic-card flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-primary-container/20 text-primary rounded-2xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-4xl">smartphone</span>
+</div>
+<h3 class="font-headline-sm mb-2">Pantallas</h3>
+<p class="font-body-sm text-secondary mb-4">Reparación inmediata de pantallas rotas y LCD.</p>
+<span class="font-label-mono text-primary text-lg font-bold">Desde $120.000</span>
+</div>
+<!-- Service 2 -->
+<div class="flex-1 bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant clinic-card flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-primary-container/20 text-primary rounded-2xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-4xl">battery_charging_full</span>
+</div>
+<h3 class="font-headline-sm mb-2">Baterías</h3>
+<p class="font-body-sm text-secondary mb-4">Cambio de batería original para mayor duración.</p>
+<span class="font-label-mono text-primary text-lg font-bold">Desde $80.000</span>
+</div>
+<!-- Service 3 -->
+<div class="flex-1 bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant clinic-card flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-primary-container/20 text-primary rounded-2xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-4xl">water_drop</span>
+</div>
+<h3 class="font-headline-sm mb-2">Humedad</h3>
+<p class="font-body-sm text-secondary mb-4">Limpieza ultrasónica y rescate de circuitos.</p>
+<span class="font-label-mono text-primary text-lg font-bold">Desde $95.000</span>
+</div>
+<!-- Service 4 -->
+<div class="flex-1 bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant clinic-card flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-primary-container/20 text-primary rounded-2xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-4xl">settings_suggest</span>
+</div>
+<h3 class="font-headline-sm mb-2">Software</h3>
+<p class="font-body-sm text-secondary mb-4">Actualizaciones, desbloqueos y respaldos.</p>
+<span class="font-label-mono text-primary text-lg font-bold">Desde $50.000</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Location Section: Google Maps CTA -->
+<section class="relative py-24 bg-inverse-surface overflow-hidden" id="location">
+<div class="absolute inset-0 opacity-30 pointer-events-none"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuANwLODMwzAcRg9nUQWicVQT7ez0Iu2LsYrh58ZxjkVZEHc0VHoaxP2kwLKi2JP-7IKhBVsN-SWo8z2VjtKuiLGXbc6Ca5_WFDtOnkYJ2J_G6JJ_V16r5kPnrGdEwfXknBawVC9bj-lv7jb2k3HCXdVTczzwGFLCeB06_s61zFAkG4XQHmvDKygNtdwVnbweT2Q18_BgabIF_qHXgFo1eR3TicAYCjkM5v5aRmQetTk5PvtWQL4dYrwnQ" alt="Fachada y tienda Cellphone Hospital Bogotá" class="w-full h-full object-cover object-center"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-inverse-surface via-inverse-surface/80 to-transparent"></div>
+<div class="container max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
+<div class="max-w-xl text-on-primary">
+<h2 class="font-headline-lg text-headline-lg mb-6">Visítanos en Cell Phone Hospital</h2>
+<p class="font-body-lg text-surface-variant mb-10">Servicio técnico especializado en mantenimiento y reparación de teléfonos, computadores y tablets. Atención confiable, rápida y garantizada.</p>
+<div class="space-y-6 mb-10"><div class="flex items-start gap-4"><span class="material-symbols-outlined text-primary-fixed mt-1">location_on</span><div><h4 class="font-label-bold text-lg">Sede Principal</h4><p class="text-surface-variant font-body-sm">Cl. 4 #6-75 (Plaza Comercial La Campana, Local 102)</p></div></div><div class="flex items-start gap-4"><span class="material-symbols-outlined text-primary-fixed mt-1">schedule</span><div><h4 class="font-label-bold text-lg">Horario de Atención</h4><p class="text-surface-variant font-body-sm">Lunes a domingo: 8:30 a.m. a 9:30 p.m.</p></div></div><div class="flex items-start gap-4"><span class="material-symbols-outlined text-primary-fixed mt-1">call</span><div><h4 class="font-label-bold text-lg">Teléfono de Contacto</h4><p class="text-surface-variant font-body-sm">+57 321 7635196</p></div></div><div class="flex items-start gap-4"><span class="material-symbols-outlined text-primary-fixed mt-1">thumb_up</span><div><h4 class="font-label-bold text-lg">Facebook</h4><p class="text-surface-variant font-body-sm">Cell Phone Hospital | San Francisco</p></div></div></div>
+<button class="bg-primary-container text-on-primary-container border-2 border-primary-container px-10 py-5 rounded-2xl font-headline-sm flex items-center gap-3 clinic-card hover:bg-white hover:border-white transition-all shadow-[0_0_20px_rgba(46,204,113,0.4)]">
+<span class="material-symbols-outlined">map</span>
+                        Ver ubicación en Google Maps
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter py-12 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="md:col-span-1">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">medical_services</span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">Cellphone Hospital</span>
+</div>
+<p class="text-secondary font-body-sm leading-relaxed mb-6">
+                    Tu clínica de confianza. Talento 100% colombiano devolviéndole la vida a tu tecnología.
+                </p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#"><span class="material-symbols-outlined text-lg">face_nod</span></a>
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#"><span class="material-symbols-outlined text-lg">camera</span></a>
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#"><span class="material-symbols-outlined text-lg">alternate_email</span></a>
+</div>
+</div>
+<div class="md:col-span-1">
+<h4 class="font-label-bold mb-6 text-on-surface uppercase tracking-wider">Servicios</h4>
+<ul class="space-y-4">
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-all font-body-sm" href="#">Reparación Express</a></li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-all font-body-sm" href="#">Revisión Gratis</a></li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-all font-body-sm" href="#">Accesorios y Forros</a></li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-all font-body-sm" href="#">Asesoría Remota</a></li>
+</ul>
+</div>
+<div class="md:col-span-1">
+<h4 class="font-label-bold mb-6 text-on-surface uppercase tracking-wider">Enlaces</h4>
+<ul class="space-y-4">
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-all font-body-sm" href="#">Preguntas Frecuentes</a></li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-all font-body-sm" href="#">Garantía</a></li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-all font-body-sm" href="#">Términos y Condiciones</a></li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-all font-body-sm" href="#">Privacidad</a></li>
+</ul>
+</div>
+<div class="md:col-span-1">
+<h4 class="font-label-bold mb-6 text-on-surface uppercase tracking-wider">Contacto</h4>
+<ul class="space-y-4">
+<li class="flex items-center gap-3 text-on-surface-variant font-body-sm"><span class="material-symbols-outlined text-primary text-sm">call</span> +57 321 7635196</li>
+<li class="flex items-center gap-3 text-on-surface-variant font-body-sm">
+<span class="material-symbols-outlined text-primary text-sm">mail</span>
+                        hola@cellhospital.co
+                    </li>
+<li class="flex items-center gap-3 text-on-surface-variant font-body-sm">
+<span class="material-symbols-outlined text-primary text-sm">whatshot</span>
+                        Escríbenos por WhatsApp
+                    </li>
+</ul>
+</div>
+</div>
+<div class="border-t border-outline-variant py-8 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex items-center gap-3">
+<span class="font-body-sm text-body-sm text-on-surface-variant">© 2024 Cellphone Hospital.</span>
+<span class="inline-block bg-[#FCD116] text-[#003893] px-2 py-0.5 rounded text-[10px] font-bold uppercase flex items-center gap-1">
+<span class="block w-1.5 h-1.5 rounded-full bg-[#CE1126]"></span> Orgullo Colombiano
+                    </span>
+</div>
+<div class="flex gap-8">
+<a class="text-on-surface-variant font-body-sm hover:text-primary transition-all" href="#">Mapa del sitio</a>
+<a class="text-on-surface-variant font-body-sm hover:text-primary transition-all" href="#">Cookies</a>
+</div>
+</div>
+</footer>
+<!-- FAB for Quick Contact -->
+<button class="fixed bottom-8 right-8 bg-primary-container text-on-primary-container p-4 rounded-full shadow-2xl z-50 hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl">chat</span>
+</button>
+<script>
+        // Simple scroll effect for TopAppBar
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-md', 'bg-white/90', 'backdrop-blur-md');
+            } else {
+                nav.classList.remove('shadow-md', 'bg-white/90', 'backdrop-blur-md');
+            }
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>
