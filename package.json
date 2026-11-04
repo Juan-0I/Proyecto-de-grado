@@ -1,0 +1,27 @@
+{
+  "name": "cellphone-hospital-mvp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MVP academico del sitio web de Cellphone Hospital (San Francisco de Sales, Cundinamarca)",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js",
+    "build:css": "tailwindcss -i ./public/assets/css/input.css -o ./public/assets/css/styles.css --minify",
+    "watch:css": "tailwindcss -i ./public/assets/css/input.css -o ./public/assets/css/styles.css --watch",
+    "seed": "node server/seed.js --reset",
+    "test:smoke": "node tests/smoke.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.64.1",
+    "tailwindcss": "^3.4.17"
+  }
+}
