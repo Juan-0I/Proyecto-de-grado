@@ -44,6 +44,49 @@ npm run watch:css  # Tailwind en modo watch (en otra terminal)
 | `npm run watch:css` | Compila Tailwind en modo vigilancia. |
 | `npm run test:smoke` | Prueba de humo en navegador real (requiere servidor activo). |
 
+### Solución de problemas en Windows (npm)
+
+Si al ejecutar `npm install` o `npm start` aparece un error como:
+
+```text
+npm.ps1 cannot be loaded because running scripts is disabled on this system.
+```
+
+es la política de ejecución de PowerShell, no un problema del proyecto. Node.js y npm pueden estar correctamente instalados.
+
+1. Permitir scripts locales solo para el usuario actual (recomendado):
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+2. O usar `npm.cmd`, que no pasa por PowerShell:
+
+```powershell
+npm.cmd install
+npm.cmd start
+```
+
+3. O abrir la terminal **Command Prompt (CMD)** y ejecutar `npm` normalmente.
+
+Para verificar la configuración actual:
+
+```powershell
+Get-ExecutionPolicy -List
+```
+
+`RemoteSigned` en `CurrentUser` es la opción recomendada por Microsoft. No desactiva el antivirus ni el firewall y no requiere permisos de administrador.
+
+### Otros errores frecuentes
+
+| Mensaje | Causa | Solución |
+| --- | --- | --- |
+| `npm : no se reconoce...` | Node.js no instalado o fuera del PATH | Instalar Node.js 24+ y reiniciar la terminal |
+| `No such built-in module: node:sqlite` | Node.js anterior a 24 | Actualizar Node.js |
+| `Could not read package.json` o `Missing script: start` | Terminal en otra carpeta | Entrar a la carpeta que contiene `package.json` |
+| `Cannot find module 'express'` | Faltan dependencias | Ejecutar `npm install` |
+| `EADDRINUSE: address already in use :::3000` | El puerto 3000 está ocupado | `$env:PORT=3001; npm start` |
+
 ## 3. Rutas principales
 
 | Ruta | Descripción |
