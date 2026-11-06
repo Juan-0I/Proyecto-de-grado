@@ -18,6 +18,8 @@ No se requiere PHP, MySQL, Docker ni servicios externos para ejecutar el proyect
 
 ## 2. Puesta en marcha
 
+> **Importante en Windows:** si `npm install` o `npm start` fallan con `npm.ps1 cannot be loaded because running scripts is disabled on this system`, es la política de ejecución de PowerShell, no el proyecto. Solución rápida: `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned` o usar `npm.cmd start`. No requiere permisos de administrador ni desactiva el antivirus. Ver [Solución de problemas en Windows](#solución-de-problemas-en-windows-npm).
+
 ```bash
 npm install
 npm run seed      # crea/restaura los datos de demostración
