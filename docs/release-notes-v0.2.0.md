@@ -49,3 +49,9 @@ Contraseña de demostración: `admin123` (cambiar con `ADMIN_PASSWORD`).
 - Las imágenes subidas se guardan en `public/uploads/productos/` (ignoradas por Git), no en la base de datos.
 - `npm run seed` reinicia la base y borra los tickets creados.
 - Antes de publicar en producción: definir `BASE_URL`, cambiar `ADMIN_PASSWORD` y añadir sesiones persistentes, rate limiting y CSRF.
+
+## Próximos pasos
+
+Las propuestas para futuras versiones están en **[docs/ROADMAP.md](https://github.com/Juan-0I/Proyecto-de-grado/blob/master/docs/ROADMAP.md)**. Incluyen mejoras de seguridad, privacidad, rendimiento y un plan de lanzamiento público.
+
+No forman parte de esta entrega y están sujetas a cambios.

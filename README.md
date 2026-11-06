@@ -208,7 +208,19 @@ La prueba usa Chrome o Edge instalado en el sistema y cubre **60 comprobaciones*
 - [docs/ROADMAP.md](docs/ROADMAP.md) — propuestas futuras y plan de lanzamiento (no implementados).
 - [DESIGN.md](DESIGN.md) — sistema de diseño heredado del prototipo.
 
-## 13. Limitaciones conocidas
+## 13. Roadmap y propuestas futuras
+
+Las mejoras para una futura `v0.3.0` y el plan de lanzamiento público están en **[docs/ROADMAP.md](docs/ROADMAP.md)**. **No están implementados ni confirmados** y no afectan la entrega de la `v0.2.0`.
+
+Resumen de las propuestas:
+
+- **Seguridad:** sesiones persistentes, rate limiting, CSRF, `helmet` y códigos de ticket más seguros.
+- **Privacidad:** eliminar la lista pública de tickets en `/seguimiento` y definir la retención de datos.
+- **Calidad:** pruebas del ciclo CRUD del admin y limpieza de imágenes huérfanas.
+- **Rendimiento:** imágenes WebP con `srcset` e imagen Open Graph de 1200×630.
+- **Lanzamiento:** hosting con volumen persistente, dominio, HTTPS, respaldos y política de datos.
+
+## 14. Limitaciones conocidas
 
 - Sesiones en memoria: se pierden al reiniciar el servidor.
 - Autenticación con una sola contraseña compartida, sin usuarios ni roles.
