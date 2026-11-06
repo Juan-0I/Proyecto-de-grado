@@ -32,7 +32,7 @@ v26.13.0
 11.20.0
 ```
 
-Si algún comando no se reconoce o la versión es menor:
+Si algún comando no se reconoce, la versión es menor o casualmente no la tienes instalado...:
 
 1. Descarga la versión **LTS** desde <https://nodejs.org/en/download>.
 2. Instálala con las opciones por defecto (npm se instala automáticamente).
