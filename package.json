@@ -1,6 +1,6 @@
 {
   "name": "cellphone-hospital-mvp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "MVP academico del sitio web de Cellphone Hospital (San Francisco de Sales, Cundinamarca)",
   "main": "server/server.js",

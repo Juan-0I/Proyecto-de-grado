@@ -1,6 +1,6 @@
 # Cellphone Hospital — MVP web
 
-**Versión:** `v0.2.0`
+**Versión:** `v0.2.1`
 
 Sitio web y panel administrativo de **Cellphone Hospital**, ubicado en San Francisco de Sales, Cundinamarca. El proyecto nace del prototipo visual de Stitch y lo convierte en una aplicación funcional con backend, base de datos y flujos demostrables de reparaciones y catálogo.
 

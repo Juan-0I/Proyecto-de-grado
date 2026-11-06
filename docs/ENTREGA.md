@@ -4,7 +4,7 @@
 **Ubicación del negocio:** Cl. 4 #6-75, Plaza Comercial La Campana, Local 102, San Francisco de Sales, Cundinamarca  
 **Tipo:** MVP académico / demostración funcional  
 **Fecha de entrega:** 8 de noviembre de 2026  
-**Versión:** `v0.2.0`
+**Versión:** `v0.2.1`
 
 ---
 
