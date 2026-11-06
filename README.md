@@ -230,4 +230,6 @@ Resumen de las propuestas:
 - Los datos viven en un archivo SQLite local (`server/data.sqlite`, ignorado por Git).
 - Las imágenes subidas se guardan en disco (`public/uploads/productos/`), no en la base de datos ni en un servicio externo.
 
-Estas limitaciones son coherentes con un MVP académico y están documentadas para una futura versión de producción.
+Estas limitaciones son entendibles con un MVP académico y están siendo documentadas para una futura versión de producción.
+
+-Juan Fierro
