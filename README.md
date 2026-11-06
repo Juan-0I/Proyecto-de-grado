@@ -158,7 +158,8 @@ Antes de publicar el sitio, activar los enlaces:
 │  ├─ cronograma.md    # Plan de cierre de la v0.2.0
 │  ├─ esquema-bd.md
 │  ├─ guion-demo.md
-│  └─ pruebas.md
+│  ├─ pruebas.md
+│  └─ ROADMAP.md       # Propuestas futuras (no implementadas)
 ├─ DESIGN.md           # Tokens y guía visual
 ├─ tailwind.config.js
 └─ package.json
@@ -204,6 +205,7 @@ La prueba usa Chrome o Edge instalado en el sistema y cubre **60 comprobaciones*
 - [docs/esquema-bd.md](docs/esquema-bd.md) — modelo de datos.
 - [docs/guion-demo.md](docs/guion-demo.md) — guion de presentación.
 - [docs/pruebas.md](docs/pruebas.md) — plan y evidencias de prueba.
+- [docs/ROADMAP.md](docs/ROADMAP.md) — propuestas futuras y plan de lanzamiento (no implementados).
 - [DESIGN.md](DESIGN.md) — sistema de diseño heredado del prototipo.
 
 ## 13. Limitaciones conocidas
