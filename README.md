@@ -11,10 +11,35 @@ Sitio web y panel administrativo de **Cellphone Hospital**, ubicado en San Franc
 ## 1. Requisitos
 
 - **Node.js 24 o superior** (probado con Node.js 26.13.0). La base de datos usa el módulo nativo `node:sqlite`.
-- npm 10 o superior.
+- npm 10 o superior (se instala junto con Node.js).
 - Navegador moderno (Chrome, Edge, Firefox o Safari recientes).
 
 No se requiere PHP, MySQL, Docker ni servicios externos para ejecutar el proyecto.
+
+### Verificar Node.js y npm
+
+Antes de instalar dependencias, abre **Command Prompt (CMD)** y ejecuta:
+
+```cmd
+node -v
+npm -v
+```
+
+Debes obtener **Node.js 24 o superior** y **npm 10 o superior**. Por ejemplo:
+
+```text
+v26.13.0
+11.20.0
+```
+
+Si algún comando no se reconoce o la versión es menor:
+
+1. Descarga la versión **LTS** desde <https://nodejs.org/en/download>.
+2. Instálala con las opciones por defecto (npm se instala automáticamente).
+3. Cierra y vuelve a abrir CMD.
+4. Repite `node -v` y `npm -v` para confirmar.
+
+> En PowerShell, si `npm` falla por la política de scripts, usa `npm.cmd` o revisa [Solución de problemas en Windows (npm)](#solución-de-problemas-en-windows-npm).
 
 ## 2. Puesta en marcha
 

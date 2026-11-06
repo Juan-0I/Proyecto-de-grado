@@ -239,6 +239,8 @@ La evidencia detallada está en [pruebas.md](pruebas.md). Resumen:
 
 > **Importante en Windows:** si `npm install` o `npm start` fallan con `npm.ps1 cannot be loaded because running scripts is disabled on this system`, es la política de ejecución de PowerShell, no el proyecto. Solución: `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned` o usar `npm.cmd start`. No requiere permisos de administrador ni desactiva el antivirus.
 
+> **Antes de ejecutar:** verifica en CMD que `node -v` muestre **24 o superior** y `npm -v` muestre **10 o superior**. Si no están instalados o son antiguos, descarga Node.js **LTS** desde <https://nodejs.org/en/download> y reinicia la terminal.
+
 ```bash
 npm install
 npm run seed
